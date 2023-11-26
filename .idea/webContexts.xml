@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebContextManager">
+    <option name="state">
+      <map>
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/admin/addpemission.jsp" value="file://$PROJECT_DIR$/src/main/webapp/admin" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/admin/admin-account-manager.jsp" value="file://$PROJECT_DIR$/src/main/webapp/admin" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/admin/admin-add-product.jsp" value="file://$PROJECT_DIR$/src/main/webapp/admin" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/admin/admin-advanced-editing.jsp" value="file://$PROJECT_DIR$/src/main/webapp/admin" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/admin/admin-bill-manager.jsp" value="file://$PROJECT_DIR$/src/main/webapp/admin" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/admin/admin-login.jsp" value="file://$PROJECT_DIR$/src/main/webapp/admin" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/admin/admin-roles-manager.jsp" value="file://$PROJECT_DIR$/src/main/webapp/admin" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/admin/user.jsp" value="file://$PROJECT_DIR$/src/main/webapp/admin" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/client/BillDetail.jsp" value="file://$PROJECT_DIR$/src/main/webapp/client" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/client/Cart.jsp" value="file://$PROJECT_DIR$/src/main/webapp/client" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/client/Detail.jsp" value="file://$PROJECT_DIR$/src/main/webapp/client" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/client/Index.jsp" value="file://$PROJECT_DIR$/src/main/webapp/client" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/client/Order.jsp" value="file://$PROJECT_DIR$/src/main/webapp/client" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/client/VerifyEmail.jsp" value="file://$PROJECT_DIR$/src/main/webapp/client" />
+      </map>
+    </option>
+  </component>
+</project>
