@@ -239,12 +239,12 @@ a:hover {
 	}
 }
 @media(min-width: 768px) and (max-width: 992px){
-	.discounts-product-right .discounts-product-image a{
-		display:block;
-		min-height: 385px;
-		max-height: 385px;
-		overflow:hidden;
-	}
+    .discounts-product-right .discounts-product-image a{
+        display:block;
+        min-height: 200px;
+        max-height: 200px;
+        overflow:hidden;
+    }
 }
 .discounts-product-right .discounts-product-image .price-box {
     position: absolute;
@@ -1028,4 +1028,49 @@ input.checkbox-add {
 #toggle-repassword.hide-password::before {
 	z-index: 99;
 	content: "\f070"; /* Icon ẩn mật khẩu */
+}
+.hiddenForm{
+    display: none!important;
+}
+
+.showForm{
+    display: block!important;
+}
+.rep{
+    color: #8b572a;
+    font-size: 1.275rem;
+    text-transform: capitalize;
+    margin-left: 6%;
+}
+
+.cssformcomment{
+
+    margin-top: 0.75rem;
+    background-color: #C0C0C0;
+    padding: 0.875rem 0.75rem;
+    margin-left: 5% ;
+    position: relative;
+    z-index: 2; /* đặt thứ tự lớp cho thẻ cha */
+
+}
+.btn-load{
+    width: 15%;
+    height: 50px;
+    margin-top: 5%;
+    margin-left: 40%;
+}
+.btn-load:hover{
+    border:3px solid black ;
+
+}
+
+.product-length {
+
+    margin-top: 0.75rem;
+
+    padding: 0.875rem 0.75rem;
+    border-bottom: 2px solid black ;
+    position: relative;
+    z-index: 1; /* đặt thứ tự lớp cho thẻ cha */
+
 }

@@ -143,7 +143,7 @@
             title="author" rel="nofollow">La Thị Thúy Hảo</a>
         & <a
             href="https://www.facebook.com/profile.php?id=100024198831345"
-            title="author" rel="nofollow">Mai Hữu Lộc</a>
+            title="author" rel="nofollow">Bùi Đình Nguyên</a>
     </div>
 </footer>
 <script>

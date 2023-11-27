@@ -122,17 +122,17 @@
                     style="position: relative; z-index: 9;">
                     <li>
                         <%--                        <c:set var="query" value="${pageContext.request.queryString}"></c:set>--%>
-                        <%--                        <c:if test="${param.lang==null}">--%>
-                        <%--                            <c:if test="${sessionScope.LANG == 'en_US' || sessionScope.LANG == null}"><a--%>
+                        <%--                        <c:if sign="${param.lang==null}">--%>
+                        <%--                            <c:if sign="${sessionScope.LANG == 'en_US' || sessionScope.LANG == null}"><a--%>
                         <%--                                    href="?${query}&&lang=vi_VN">Tiếng Việt</a></c:if>--%>
-                        <%--                            <c:if test="${sessionScope.LANG == 'vi_VN' }"><a--%>
+                        <%--                            <c:if sign="${sessionScope.LANG == 'vi_VN' }"><a--%>
                         <%--                                    href="?${query}&&lang=en_US">English</a></c:if>--%>
                         <%--                        </c:if>--%>
-                        <%--                        <c:if test="${param.lang!=null}">--%>
-                        <%--                            <c:if test="${sessionScope.LANG == 'en_US' }"><a--%>
+                        <%--                        <c:if sign="${param.lang!=null}">--%>
+                        <%--                            <c:if sign="${sessionScope.LANG == 'en_US' }"><a--%>
                         <%--                                    href="?${fn:substring(query, 0, query.length()-12)}&&lang=vi_VN">Tiếng--%>
                         <%--                                Việt</a></c:if>--%>
-                        <%--                            <c:if test="${sessionScope.LANG == 'vi_VN' }"><a--%>
+                        <%--                            <c:if sign="${sessionScope.LANG == 'vi_VN' }"><a--%>
                         <%--                                    href="?${fn:substring(query, 0, query.length()-12)}&&lang=en_US">English</a></c:if>--%>
                         <%--                        </c:if>--%>
                         <div id="google_translate_element" style="margin-top: 11px"></div>

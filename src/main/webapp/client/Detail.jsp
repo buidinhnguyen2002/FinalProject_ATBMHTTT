@@ -487,7 +487,7 @@
                                         success: function (data) {
                                             let respone = JSON.parse(data);
                                             let show = JSON.parse(respone.show);
-                                            let test = "";
+                                            let sign = "";
                                             let reply = "";
                                             let comt = "";
                                             let formrep = "";
