@@ -112,7 +112,7 @@
 									</div>
 
 									<div class="col-md-11">
-										<p style="color: red;" class="col-md-11" id="erroremail">${emailexit}</p>
+										<p style="color: red;" class="col-md-11" id="erroresmail">${emailexit}</p>
 									</div>
 
 									<div class="row">
@@ -237,7 +237,7 @@
 								</script>
 
 								<div class="g-recaptcha"
-									data-sitekey="6LcEOp4kAAAAAKd6WPwrePNY_OkIHz9GO7hDSmcb"></div>
+									data-sitekey="6LeyzYwkAAAAAJKQMZkAtZWJ0zLVOnDuBDAavTNJ"></div>
 
 								<p style="color: red;">${error}</p>
 								<div class="row">
@@ -425,7 +425,7 @@
 															|| pass.length < 8) {
 														$('#errorPass')
 																.text(
-																		"<fmt:message key="Please.enter.a.password.with.at.least.1.uppercase.and.1.numeric.character" bundle="${lang}"></fmt:message>");
+																		"Vui lòng nhập mật khẩu có ít nhất 1 kí tự hoa, 1 kí tự thường, 1 kí tự só và 1 kí tự đặt biệt, độ dài lớn hơn 8");
 														$('#errorPass').show();
 
 													} else {
@@ -437,7 +437,7 @@
 												} else {
 													$('#errorPass')
 															.text(
-																	"<fmt:message key="Please.enter.full.information" bundle="${lang}"></fmt:message>");
+																	"Vui lòng nhập mật khẩu có ít nhất 1 kí tự hoa, 1 kí tự thường, 1 kí tự só và 1 kí tự đặt biệt, độ dài lớn hơn 8");
 													$('#errorPass').show();
 
 													$('#errorpass2').text("");
@@ -453,7 +453,7 @@
 													if (repass != pass) {
 														$('#errorRepass')
 																.text(
-																		"<fmt:message key="Please.enter.the.matching.password" bundle="${lang}"></fmt:message>");
+																		"Vui lòng nhập mật khẩu có ít nhất 1 kí tự hoa, 1 kí tự thường, 1 kí tự só và 1 kí tự đặt biệt, độ dài lớn hơn 8");
 														$('#errorRepass').css(
 																"display",
 																"block");
@@ -467,7 +467,7 @@
 												} else {
 													$('#errorRepass')
 															.text(
-																	"<fmt:message key="Please.enter.full.information" bundle="${lang}"></fmt:message>");
+																	"Vui lòng nhập mật khẩu có ít nhất 1 kí tự hoa, 1 kí tự thường, 1 kí tự só và 1 kí tự đặt biệt, độ dài lớn hơn 8");
 													$('#errorRepass').css(
 															"display", "block");
 												}

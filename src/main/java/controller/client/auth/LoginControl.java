@@ -49,7 +49,7 @@ public class LoginControl extends HttpServlet {
                         log.setSrc(this.name + " LOGIN FALSE");
                         log.setContent("LOGIN FALSE: USER - " + userName);
                         log.setLevel(Log.WARNING);
-                        request.setAttribute("error", "Bạn nhập sai mật khẩu " + num + " lần (Nếu 5 liên tục nhập sai 5 lần tài khoản của bạn sẽ bị khóa)");
+                        request.setAttribute("error", "Bạn nhập sai mật khẩu " + num + " lần (Nếu 10 liên tục nhập sai 5 lần tài khoản của bạn sẽ bị khóa)");
                         request.getRequestDispatcher("/client/Login.jsp").forward(request, response);
                     } else {
                         if (!verify) {

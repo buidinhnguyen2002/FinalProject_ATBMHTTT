@@ -80,8 +80,6 @@ public class RegisterControl extends HttpServlet {
 			log.setLevel(Log.WARNING);
 			request.setAttribute("cus", a);
 			request.getRequestDispatcher("/VerifyEmailControl").forward(request, response);
-
-
 		}
 		DB.me().insert(log);
 	}

@@ -3540,6 +3540,25 @@ table.grid td {
     font-weight: 500;
     padding: 5px 20px;
 }
+/* Định dạng cho phân trang */
+.col-lg-12 .sk-category-paging-wrap .pagination {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.col-lg-12 .sk-category-paging-wrap .page-item {
+    margin-right: 5px;
+}
+
+.col-lg-12 .sk-category-paging-wrap .page-link {
+    border: 1px solid #007bff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
 
 
 

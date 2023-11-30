@@ -158,9 +158,44 @@ public class AuthDAO {
         }
     }
 
-    public static boolean signUp(String userName, String password, String name, String email, String address, String NumberPhone) {
+//    public static boolean signUp(String userName, String password, String name, String email, String address, String NumberPhone) {
+//        String signInQuery = "INSERT INTO accounts (accountName, password, fullName, email, address, phone) VALUES (?, ?, ?, ?, ?, ?);";
+//        String rollAccountQuery = "INSERT INTO account_roles (idRole,idAccount) VALUES (1,?);";
+//        String passEncode = EnCode.toSHA1(password);
+//        Jdbi me = DBContext.me();
+//        me.withHandle(handle -> {
+//            try {
+//                handle.begin();
+//                long accountId = handle.createUpdate(signInQuery)
+//                        .bind(0, userName)
+//                        .bind(1, passEncode)
+//                        .bind(2, name)
+//                        .bind(3, email)
+//                        .bind(4, address)
+//                        .bind(5, NumberPhone)
+//                        .executeAndReturnGeneratedKeys()
+//                        .mapTo(Long.class)
+//                        .one();
+//
+//                handle.createUpdate(rollAccountQuery)
+//                        .bind(0, accountId)
+//                        .execute();
+//
+//                handle.commit();
+//                return true;
+//            } catch (Exception e) {
+//                handle.rollback();
+//                e.printStackTrace();
+//            }
+//            return false;
+//        });
+//        return false;
+//    }
+
+    public static boolean signUp(String userName, String password, String name, String email, String address, String NumberPhone, String publicKey) {
         String signInQuery = "INSERT INTO accounts (accountName, password, fullName, email, address, phone) VALUES (?, ?, ?, ?, ?, ?);";
         String rollAccountQuery = "INSERT INTO account_roles (idRole,idAccount) VALUES (1,?);";
+        String keySignatureQuery = "INSERT INTO public_key_signature (idAccount, publicKey) VALUES (?,?);";
         String passEncode = EnCode.toSHA1(password);
         Jdbi me = DBContext.me();
         me.withHandle(handle -> {
@@ -180,7 +215,7 @@ public class AuthDAO {
                 handle.createUpdate(rollAccountQuery)
                         .bind(0, accountId)
                         .execute();
-
+                handle.createUpdate(keySignatureQuery).bind(0, accountId).bind(1, publicKey).execute();
                 handle.commit();
                 return true;
             } catch (Exception e) {
