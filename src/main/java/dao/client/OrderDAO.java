@@ -27,6 +27,7 @@ public class OrderDAO {
         String query = "insert into orders (idAccount) values(?);";
         return me.withHandle(handle -> handle.createUpdate(query).bind(0, idAccount).executeAndReturnGeneratedKeys("id").mapTo(int.class).one());
     }
+
     public static int deleteOrder(int idOrder) {
         Jdbi me = DBContext.me();
         String query = "delete from orders where id = ?;";
@@ -41,13 +42,16 @@ public class OrderDAO {
 
     public static void updateOrder(Order order) {
         Jdbi me = DBContext.me();
-        String query = "update orders set totalPrice = ?,sale=?,status=?,statusPay=?,address=?,note=?,wardId=?,districtId=? where id = ?";
-        me.withHandle(handle -> handle.createUpdate(query).bind(0, order.getTotalPrice()).bind(1, order.getSale()).bind(2, order.getStatus()).bind(3, order.getStatusPay()).bind(4, order.getAddress()).bind(5, order.getNote()).bind(6, order.getWardId()).bind(7, order.getDistrictId()).bind(8, order.getId()).execute());
+        String query = "update orders set totalPrice = ?,sale=?,status=?,statusPay=?,address=?,note=?,wardId=?,districtId=?,signature=? where id = ?";
+        me.withHandle(handle -> handle.createUpdate(query).bind(0, order.getTotalPrice()).bind(1, order.getSale()).bind(2, order.getStatus()).
+                bind(3, order.getStatusPay()).bind(4, order.getAddress()).bind(5, order.getNote()).bind(6, order.getWardId()).
+                bind(7, order.getDistrictId()).bind(8,order.getSignature()).bind(9, order.getId()).execute());
     }
-    public static void updateStatusOrder(String status,String id) {
+
+    public static void updateStatusOrder(String status, String id) {
         Jdbi me = DBContext.me();
         String query = "update orders set status = ?  where id = ?";
-        me.withHandle(handle -> handle.createUpdate(query).bind(0, status).bind(1,id).execute());
+        me.withHandle(handle -> handle.createUpdate(query).bind(0, status).bind(1, id).execute());
     }
 
     public static Order getOrderByBid(String id) {
@@ -71,12 +75,13 @@ public class OrderDAO {
                 ;
     }
 
-    public static int getQuantitySizeColor(int idProduct,int idSizeColor) {
+    public static int getQuantitySizeColor(int idProduct, int idSizeColor) {
         Jdbi me = DBContext.me();
         String query = "SELECT quantity FROM inventorys where idProduct = ? and id_size_color=?";
         return me.withHandle(handle -> handle.createQuery(query).bind(0, idProduct).bind(1, idSizeColor).mapTo(Integer.class).findFirst().orElse(null))
                 ;
     }
+
     public static int checkDiscount(String reductionCode) {
         Jdbi me = DBContext.me();
         String query = "SELECT percentage FROM discounts WHERE codeDiscount = ? AND status = 1 and isDelete = 0 AND NOW() BETWEEN startTime AND endTime";

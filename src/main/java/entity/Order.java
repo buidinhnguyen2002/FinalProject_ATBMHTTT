@@ -18,6 +18,7 @@ public class Order implements Serializable {
 	private String updateAt; // ngay mua
 	private String wardId;
 	private String districtId;
+	private String signature;
 
     public Order(int id, Account account, double totalPrice) {
 		this.id=id;
@@ -224,6 +225,14 @@ public class Order implements Serializable {
 
 	public void setOrderDetails(List<OrderDetail> orderDetails) {
 		this.orderDetails = orderDetails;
+	}
+
+	public String getSignature() {
+		return signature;
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
 	}
 
 	@Override
