@@ -1,6 +1,7 @@
 package controller.client.cart;
 
 import java.io.IOException;
+import java.security.Signature;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,7 @@ import dao.client.OrderDAO;
 import entity.Account;
 import entity.Order;
 import entity.OrderDetail;
+import entity.SHA;
 import util.API;
 
 @WebServlet("/cart/AddBillControl")
@@ -114,6 +116,10 @@ public class AddToBillControl extends HttpServlet {
                 order.setNote(request.getParameter("note"));
                 order.setWardId(wardId);
                 order.setDistrictId(districtId);
+                String orderInfo  = order.orderInfo();
+                String hashOrder = SHA.hashText(orderInfo);
+                Signature signature = Signature.getInstance("SHA256withRSA");
+
                 OrderDAO.updateOrder(order);
                 request.setAttribute("order", order);
                 request.setAttribute("ship", ship);

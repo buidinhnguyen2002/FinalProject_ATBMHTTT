@@ -246,5 +246,22 @@ public class Order implements Serializable {
 				", orderDetails=" + orderDetails +
 				'}';
 	}
+	public String orderInfo(){
+		return "Order{" +
+				"id=" + id +
+				", createAt='" + createAt + '\'' +
+				", deliveryAt='" + deliveryAt + '\'' +
+				", statusPay='" + statusPay + '\'' +
+				", idAccount=" + idAccount +
+				", account=" + account +
+				", sale=" + sale +
+				", totalPrice=" + totalPrice +
+				", address='" + address + '\'' +
+				", note='" + note + '\'' +
+				", wardId='" + wardId + '\'' +
+				", districtId='" + districtId + '\'' +
+				", orderDetails=" + orderDetails +
+				'}';
+	}
 }
 
