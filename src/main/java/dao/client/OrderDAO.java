@@ -1,5 +1,7 @@
 package dao.client;//package dao.client;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import context.DBContext;
@@ -24,6 +26,18 @@ public class OrderDAO {
         String query = "insert into orders (idAccount) values(?);";
         return me.withHandle(handle -> handle.createUpdate(query).bind(0, idAccount).executeAndReturnGeneratedKeys("id").mapTo(int.class).one());
     }
+
+//    public static Order createOrder(int idAccount) {
+//        Jdbi me = DBContext.me();
+//        String query = "insert into orders (idAccount) values(?);";
+//        Order order = new Order();
+//        int idOrder = me.withHandle(handle -> handle.createUpdate(query).bind(0, idAccount).executeAndReturnGeneratedKeys("id").mapTo(int.class).one());
+//        order.setId(idOrder);
+//        order.setIdAccount(idAccount);
+//        String createAt = getCreateAtOrder(idOrder);
+//        order.setCreateAt(createAt);
+//        return order;
+//    }
 
     public static int deleteOrder(int idOrder) {
         Jdbi me = DBContext.me();
@@ -107,11 +121,32 @@ public class OrderDAO {
         return publicKeyUser;
     }
 
+//    public static String getCreateAtOrder(int id) {
+//        Jdbi me = DBContext.me();
+//        String query = "select createAt from orders where id = ?";
+//        System.out.println("Query: " + query);
+//        String createAt = me.withHandle(handle -> handle.createQuery(query).bind(0, id).mapToBean(String.class).one());
+//        return createAt;
+//    }
+public static String getCreateAtOrder(int id) {
+    Jdbi me = DBContext.me();
+    String query = "select createAt from orders where id = ?";
+    Timestamp createAt = me.withHandle(handle ->
+            handle.createQuery(query)
+                    .bind(0, id)
+                    .mapTo(Timestamp.class)
+                    .one()
+    );
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    return dateFormat.format(createAt);
+}
+
 
     public static void main(String[] args) {
 //        System.out.println(getOrderDetailByBid("135"));
-       System.out.println(getOrderDetailByBid("133"));
-       System.out.println(getPublicKeyById(1));
+//       System.out.println(getOrderDetailByBid("133"));
+//       System.out.println(getPublicKeyById(1));
+        System.out.println(getCreateAtOrder(146));
     }
 
 }

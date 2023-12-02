@@ -62,7 +62,10 @@ public class AddToBillControl extends HttpServlet {
                 order.setAccount(account);
                 order.setStatus("Đang xử lý");
                 int idOrder = OrderDAO.createOrder(order.getAccount().getId());
+//                order = OrderDAO.createOrder(order.getAccount().getId());
+                String createAt = OrderDAO.getCreateAtOrder(idOrder);
                 order.setId(idOrder);
+                order.setCreateAt(createAt);
 //                add id account
                 order.setIdAccount(account.getId());
                 String statusPay = (String) session.getAttribute("isPay");
