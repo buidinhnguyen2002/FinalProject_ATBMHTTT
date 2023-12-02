@@ -159,6 +159,7 @@
                                     <th>Trạng thái thanh toán</th>
                                     <th>Trạng thái vận chuyển</th>
                                     <th>Tính năng</th>
+                                    <th>Xác thực đơn hàng</th>
                                 </tr>
                                 </thead>
                                 <tbody id="renderListAccount">
@@ -203,6 +204,10 @@
                                                 href="${pageContext.request.contextPath}/cart/DetailBill?id=${o.id}">
                                             <fmt:message
                                                     key="click.to.view" bundle="${lang}"></fmt:message></a></td>
+                                        <td>
+                                            <button onclick="checkSignature(${o.id})">Check</button>
+                                            <span id="verify"></span>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
@@ -227,6 +232,29 @@
                 icon: 'error',
                 title: 'Oops...',
                 text: error,
+            });
+        }
+        function checkSignature(id){
+            $.ajax({
+                url: "${pageContext.request.contextPath}/cart/SignatureController",
+                type: "POST",
+                data: {
+                    id: id,
+                },
+                success: function (data) {
+                    let isVerify = JSON.parse(data).verify;
+                    // Thay đổi
+                    let elementId = "verify";
+                    let verifyElement = document.getElementById(elementId);
+                    if (isVerify) {
+                        verifyElement.innerText = "Chữ ký hợp lệ";
+                    } else {
+                        verifyElement.innerText = "Chữ ký không hợp lệ";
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
             });
         }
 

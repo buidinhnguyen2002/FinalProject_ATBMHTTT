@@ -3,10 +3,7 @@ package dao.client;//package dao.client;
 import java.util.List;
 
 import context.DBContext;
-import entity.Account;
-import entity.Order;
-import entity.OrderDetail;
-import entity.Product;
+import entity.*;
 import org.jdbi.v3.core.Jdbi;
 
 public class OrderDAO {
@@ -45,7 +42,7 @@ public class OrderDAO {
         String query = "update orders set totalPrice = ?,sale=?,status=?,statusPay=?,address=?,note=?,wardId=?,districtId=?,signature=? where id = ?";
         me.withHandle(handle -> handle.createUpdate(query).bind(0, order.getTotalPrice()).bind(1, order.getSale()).bind(2, order.getStatus()).
                 bind(3, order.getStatusPay()).bind(4, order.getAddress()).bind(5, order.getNote()).bind(6, order.getWardId()).
-                bind(7, order.getDistrictId()).bind(8,order.getSignature()).bind(9, order.getId()).execute());
+                bind(7, order.getDistrictId()).bind(8, order.getSignature()).bind(9, order.getId()).execute());
     }
 
     public static void updateStatusOrder(String status, String id) {
@@ -56,7 +53,7 @@ public class OrderDAO {
 
     public static Order getOrderByBid(String id) {
         Jdbi me = DBContext.me();
-        String query = "select id,createAt,deliveryAt,statusPay,idAccount,sale,totalPrice,status,address,note,idEmployee,updateAt from orders where id = ?";
+        String query = "select id,createAt,deliveryAt,statusPay,idAccount,sale,totalPrice,status,address,note,idEmployee,updateAt,publicKeyId from orders where id = ?";
         Order order = me.withHandle(handle -> handle.createQuery(query).bind(0, id).mapToBean(Order.class).one());
         order.setAccount(UtilDAO.findAccountById(order.getIdAccount()));
         return order;
@@ -92,9 +89,24 @@ public class OrderDAO {
                 .orElse(0));
     }
 
+    public static String getSignatureById(int idOrder) {
+        Jdbi me = DBContext.me();
+        String query = "SELECT signature FROM orders where id = ?";
+        return me.withHandle(handle -> handle.createQuery(query).bind(0, idOrder).mapTo(String.class).findOne().orElse(null));
+    }
+
+    public static PublicKeyUser getPublicKeyById(int id) {
+        Jdbi me = DBContext.me();
+        String query = "SELECT publicKey,expired,createAt FROM public_key_signature where id = ?";
+        PublicKeyUser publicKeyUser = me.withHandle(handle -> handle.createQuery(query).bind(0, id).mapToBean(PublicKeyUser.class).one());
+        return publicKeyUser;
+    }
+
 
     public static void main(String[] args) {
-        System.out.println(getOrderDetailByBid("135"));
+//        System.out.println(getOrderDetailByBid("135"));
+       System.out.println(getOrderDetailByBid("133"));
+       System.out.println(getPublicKeyById(1));
     }
 
 }
