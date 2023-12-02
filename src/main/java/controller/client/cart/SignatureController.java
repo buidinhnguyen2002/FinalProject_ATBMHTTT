@@ -41,7 +41,8 @@ public class SignatureController extends HttpServlet {
         order.setOrderDetails(OrderDAO.getOrderDetailByBid(id));
         String signature = OrderDAO.getSignatureById(Integer.parseInt(id));
         String data = order.orderInfo();
-
+        System.out.println("Key: "+publicKeyUser.getPublicKey());
+        System.out.println("Data: "+data);
         boolean result = false;
         try {
             result = ElectronicSignature.checkSignature(publicKeyUser.getPublicKey(), data, signature);

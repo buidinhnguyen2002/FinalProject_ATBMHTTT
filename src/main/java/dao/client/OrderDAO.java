@@ -31,10 +31,15 @@ public class OrderDAO {
         return me.withHandle(handle -> handle.createUpdate(query).bind(0, idOrder).execute());
     }
 
-    public static void createOrderDetail(OrderDetail orderDetail) {
+//    public static void createOrderDetail(OrderDetail orderDetail) {
+//        Jdbi me = DBContext.me();
+//        String query = "insert into order_details (idOrder,idProduct,quantity,price,productSize,productColor) values(?,?,?,?,?,?);";
+//        me.withHandle(handle -> handle.createUpdate(query).bind(0, orderDetail.getIdOrder()).bind(1, orderDetail.getProduct().getId()).bind(2, orderDetail.getQuantity()).bind(3, orderDetail.getPrice()).bind(4, orderDetail.getProductSize()).bind(5, orderDetail.getProductColor()).execute());
+//    }
+    public static int createOrderDetail(OrderDetail orderDetail) {
         Jdbi me = DBContext.me();
         String query = "insert into order_details (idOrder,idProduct,quantity,price,productSize,productColor) values(?,?,?,?,?,?);";
-        me.withHandle(handle -> handle.createUpdate(query).bind(0, orderDetail.getIdOrder()).bind(1, orderDetail.getProduct().getId()).bind(2, orderDetail.getQuantity()).bind(3, orderDetail.getPrice()).bind(4, orderDetail.getProductSize()).bind(5, orderDetail.getProductColor()).execute());
+        return me.withHandle(handle -> handle.createUpdate(query).bind(0, orderDetail.getIdOrder()).bind(1, orderDetail.getProduct().getId()).bind(2, orderDetail.getQuantity()).bind(3, orderDetail.getPrice()).bind(4, orderDetail.getProductSize()).bind(5, orderDetail.getProductColor()).executeAndReturnGeneratedKeys().mapTo(Integer.class).one());
     }
 
     public static void updateOrder(Order order) {
@@ -53,7 +58,7 @@ public class OrderDAO {
 
     public static Order getOrderByBid(String id) {
         Jdbi me = DBContext.me();
-        String query = "select id,createAt,deliveryAt,statusPay,idAccount,sale,totalPrice,status,address,note,idEmployee,updateAt,publicKeyId from orders where id = ?";
+        String query = "select id,createAt,deliveryAt,statusPay,idAccount,sale,totalPrice,status,address,note, wardId, districtId,idEmployee,updateAt,publicKeyId from orders where id = ?";
         Order order = me.withHandle(handle -> handle.createQuery(query).bind(0, id).mapToBean(Order.class).one());
         order.setAccount(UtilDAO.findAccountById(order.getIdAccount()));
         return order;
