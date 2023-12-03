@@ -92,7 +92,7 @@ task docker_upload_file_to_server {
             session(remotes.host) {
                 remove '/usr/deploy/.war'
 
-                put from: "${project.projectDir}/build/libs/Project_TTLTW_Nhom14-1.0-SNAPSHOT.war",
+                put from: "${project.projectDir}/build/libs/Project_ATBMHTTT-1.0-SNAPSHOT.war",
                         into: "/usr/deploy/.war"
             }
         }
