@@ -487,6 +487,26 @@
                                     </tr>
                                     </tfoot>
                                 </table>
+<%--                                <div class="field__input-wrapper" style="margin-top: 10px">--%>
+<%--                                    <label for="reductionCode" class="field__label">Nhập private key</label>--%>
+<%--                                    <input name="key" id="key"--%>
+<%--                                           type="text" class="field__input">--%>
+<%--                                </div>--%>
+
+                                <div class="field " style="margin-top: 10px; padding: unset">
+                                    <div class="field__input-btn-wrapper">
+                                        <div class="field__input-wrapper">
+                                            <label for="privateKey" class="field__label" style="transition: all .2s ease-out;
+    -webkit-transition: all .2s ease-out;">Nhập private key</label>
+                                            <input name="privateKey" id="privateKey"
+                                                   type="text" class="field__input">
+                                        </div>
+                                    </div>
+                                    <p class="field__message field__message--error field__message--error-always-show"
+                                       data-bind-show="!isLoadingReductionCode && isLoadingReductionCodeError"
+                                       data-bind="loadingReductionCodeErrorMessage">
+                                    </p>
+                                </div>
                             </div>
                             <div class="order-summary__nav field__input-btn-wrapper hide-on-mobile layout-flex--row-reverse">
                                 <button id="submitBtn" type="submit" class="btn btn-checkout spinner">

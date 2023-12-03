@@ -44,12 +44,6 @@ public class OrderDAO {
         String query = "delete from orders where id = ?;";
         return me.withHandle(handle -> handle.createUpdate(query).bind(0, idOrder).execute());
     }
-
-//    public static void createOrderDetail(OrderDetail orderDetail) {
-//        Jdbi me = DBContext.me();
-//        String query = "insert into order_details (idOrder,idProduct,quantity,price,productSize,productColor) values(?,?,?,?,?,?);";
-//        me.withHandle(handle -> handle.createUpdate(query).bind(0, orderDetail.getIdOrder()).bind(1, orderDetail.getProduct().getId()).bind(2, orderDetail.getQuantity()).bind(3, orderDetail.getPrice()).bind(4, orderDetail.getProductSize()).bind(5, orderDetail.getProductColor()).execute());
-//    }
     public static int createOrderDetail(OrderDetail orderDetail) {
         Jdbi me = DBContext.me();
         String query = "insert into order_details (idOrder,idProduct,quantity,price,productSize,productColor) values(?,?,?,?,?,?);";
@@ -120,14 +114,6 @@ public class OrderDAO {
         PublicKeyUser publicKeyUser = me.withHandle(handle -> handle.createQuery(query).bind(0, id).mapToBean(PublicKeyUser.class).one());
         return publicKeyUser;
     }
-
-//    public static String getCreateAtOrder(int id) {
-//        Jdbi me = DBContext.me();
-//        String query = "select createAt from orders where id = ?";
-//        System.out.println("Query: " + query);
-//        String createAt = me.withHandle(handle -> handle.createQuery(query).bind(0, id).mapToBean(String.class).one());
-//        return createAt;
-//    }
 public static String getCreateAtOrder(int id) {
     Jdbi me = DBContext.me();
     String query = "select createAt from orders where id = ?";

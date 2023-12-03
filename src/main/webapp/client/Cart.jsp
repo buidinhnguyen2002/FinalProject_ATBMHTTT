@@ -23,6 +23,7 @@
     <jsp:include page="./link/Link.jsp"></jsp:include>
     <link rel="stylesheet" type="text/css"
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
 </head>
 
 
@@ -204,8 +205,8 @@
                                                 href="${pageContext.request.contextPath}/cart/DetailBill?id=${o.id}">
                                             <fmt:message
                                                     key="click.to.view" bundle="${lang}"></fmt:message></a></td>
-                                        <td>
-                                            <button onclick="checkSignature(${o.id})">Check</button>
+                                        <td class="text-center" style="display: flex; flex-direction: row; justify-content: center;align-items: center">
+                                            <button class="btn btn-success" style="border-radius: 10px; font-size: 12px;" onfocus="this.style.outline='none'" onclick="checkSignature(${o.id})">Verify</button>
                                             <span id="verify"></span>
                                         </td>
                                     </tr>
@@ -247,9 +248,10 @@
                     let elementId = "verify";
                     let verifyElement = document.getElementById(elementId);
                     if (isVerify) {
-                        verifyElement.innerText = "Chữ ký hợp lệ";
+                        // verifyElement.innerText = "Chữ ký hợp lệ";
+                        verifyElement.innerHTML = '<i style="color: #0aa60f; font-size: 20px" class="bi bi-check-lg"></i>';
                     } else {
-                        verifyElement.innerText = "Chữ ký không hợp lệ";
+                        verifyElement.innerHTML = '<i style="color: red; font-size: 20px" class="bi bi-x-lg"></i>';
                     }
                 },
                 error: function (data) {
