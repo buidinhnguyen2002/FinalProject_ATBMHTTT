@@ -207,7 +207,8 @@
                                                     key="click.to.view" bundle="${lang}"></fmt:message></a></td>
                                         <td class="text-center" style="display: flex; flex-direction: row; justify-content: center;align-items: center">
                                             <button class="btn btn-success" style="border-radius: 10px; font-size: 12px;" onfocus="this.style.outline='none'" onclick="checkSignature(${o.id})">Verify</button>
-                                            <span id="verify"></span>
+<%--                                            <span id="verify"></span>--%>
+                                            <span id="verify-${o.id}"></span>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -245,7 +246,8 @@
                 success: function (data) {
                     let isVerify = JSON.parse(data).verify;
                     // Thay đổi
-                    let elementId = "verify";
+                    // let elementId = "verify";
+                    let elementId = "verify-"+id;
                     let verifyElement = document.getElementById(elementId);
                     if (isVerify) {
                         // verifyElement.innerText = "Chữ ký hợp lệ";

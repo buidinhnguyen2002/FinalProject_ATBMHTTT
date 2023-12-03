@@ -9,7 +9,8 @@
 <html class="floating-labels">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="https://lh3.googleusercontent.com/pw/AJFCJaXoQYraxnJ5Xb69WqHM1VQGknKZhyfiZbMmB6wyAJiOeVD_C15MO0MebL6Y0uDb0qf16BnhswiDxBoU4CWiObfRtcFdAXDrKN651ub56WgeBV220MOgoxEsdKXwjLUSliRIWVTPaCWaLlX2w7m6lcRb2e8ENo07IehTwKsl2n2wSVICj1Hj7ZmpCko_yHw4eUdPlshXFwmPwVvQY2HQ11NQvVxKDOtL6hxMkaBaIG0QgE4swK5S0IEWyhPf3kUuXDjqo4RiNKVYjTdzi__SxIZ8TsIEcFoiW5V837ODrZmqArfVv--iUhpeOfG-32_GFelpygILotxWz4tPAi_9a5mrjqxKTomZuqtwZt2h9UooAD1nIbQyBs2mwm-qNswhYs_OXFnH6gtCFLm4t-B01KP5caG00vub-x2ulXeuYUCxFky5zuFB7oPhbkXnfwePfgl8Jm__5ENCtTnfAQXTWYWGIRtRmaRAHZFwfP0jERY_VDrjB9SV2SyeBgdjv6CiKQwf8ePaj_eiEvzuh1DSK8mRkX7c6XmDocSYoMMuqYG2v3Yv3BVfJE5npzwElwhimrriPZekxBi5GC4vS1NI-KVqxDBjFWwSA1F3BuOLGX92GfozvEBj1oN9K-G3usx7MsxpGOvGY3Ni0N-5QR3CBWp5xteKjftbQEaJk02glp-saVoih7IFQf6bFQnRkhmQMN7DFNzsObALswIITfB54QwHf0vdZJTemb8d01FFQFLeqZ0GSF86Pa3lbyvzJ2HaP569GLNLSgfzg-jvbNV5R1rqOwWgpW4sd5Q3KaxRd97_X1nD48xnNHqx4aJr4FOcshElIwzKzCRQkYumMnfqLqTDzRE83VDgQJz7KaxRzM2N1qP5GsVmpvFg0FDXGPaTOiC1IK3QnqykTDaJMz-1fXqa6fBP6kIwrytrUYfAdfydwykxC5piNeP9Xkb_LT1cIdnR_08jDI7-rFaIovldG3fCF2ECZg=w80-h80-s-no?authuser=0">
+    <link rel="icon"
+          href="https://lh3.googleusercontent.com/pw/AJFCJaXoQYraxnJ5Xb69WqHM1VQGknKZhyfiZbMmB6wyAJiOeVD_C15MO0MebL6Y0uDb0qf16BnhswiDxBoU4CWiObfRtcFdAXDrKN651ub56WgeBV220MOgoxEsdKXwjLUSliRIWVTPaCWaLlX2w7m6lcRb2e8ENo07IehTwKsl2n2wSVICj1Hj7ZmpCko_yHw4eUdPlshXFwmPwVvQY2HQ11NQvVxKDOtL6hxMkaBaIG0QgE4swK5S0IEWyhPf3kUuXDjqo4RiNKVYjTdzi__SxIZ8TsIEcFoiW5V837ODrZmqArfVv--iUhpeOfG-32_GFelpygILotxWz4tPAi_9a5mrjqxKTomZuqtwZt2h9UooAD1nIbQyBs2mwm-qNswhYs_OXFnH6gtCFLm4t-B01KP5caG00vub-x2ulXeuYUCxFky5zuFB7oPhbkXnfwePfgl8Jm__5ENCtTnfAQXTWYWGIRtRmaRAHZFwfP0jERY_VDrjB9SV2SyeBgdjv6CiKQwf8ePaj_eiEvzuh1DSK8mRkX7c6XmDocSYoMMuqYG2v3Yv3BVfJE5npzwElwhimrriPZekxBi5GC4vS1NI-KVqxDBjFWwSA1F3BuOLGX92GfozvEBj1oN9K-G3usx7MsxpGOvGY3Ni0N-5QR3CBWp5xteKjftbQEaJk02glp-saVoih7IFQf6bFQnRkhmQMN7DFNzsObALswIITfB54QwHf0vdZJTemb8d01FFQFLeqZ0GSF86Pa3lbyvzJ2HaP569GLNLSgfzg-jvbNV5R1rqOwWgpW4sd5Q3KaxRd97_X1nD48xnNHqx4aJr4FOcshElIwzKzCRQkYumMnfqLqTDzRE83VDgQJz7KaxRzM2N1qP5GsVmpvFg0FDXGPaTOiC1IK3QnqykTDaJMz-1fXqa6fBP6kIwrytrUYfAdfydwykxC5piNeP9Xkb_LT1cIdnR_08jDI7-rFaIovldG3fCF2ECZg=w80-h80-s-no?authuser=0">
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
@@ -82,7 +83,7 @@
 
 <div data-tg-refresh="checkout" id="checkout" class="content">
     <form method="post"
-          action="${pageContext.request.contextPath}/cart/AddBillControl">
+          action="${pageContext.request.contextPath}/cart/AddBillControl" id="form_submit">
         <input type="hidden" name="_method" value="patch"/>
         <div class="wrap">
             <main class="main">
@@ -487,21 +488,16 @@
                                     </tr>
                                     </tfoot>
                                 </table>
-<%--                                <div class="field__input-wrapper" style="margin-top: 10px">--%>
-<%--                                    <label for="reductionCode" class="field__label">Nhập private key</label>--%>
-<%--                                    <input name="key" id="key"--%>
-<%--                                           type="text" class="field__input">--%>
-<%--                                </div>--%>
-
                                 <div class="field " style="margin-top: 10px; padding: unset">
                                     <div class="field__input-btn-wrapper">
                                         <div class="field__input-wrapper">
                                             <label for="privateKey" class="field__label" style="transition: all .2s ease-out;
     -webkit-transition: all .2s ease-out;">Nhập private key</label>
                                             <input name="privateKey" id="privateKey"
-                                                   type="text" class="field__input">
+                                                   type="text" class="field__input" required>
                                         </div>
                                     </div>
+                                    <p id="error-key" style="color: red"></p>
                                     <p class="field__message field__message--error field__message--error-always-show"
                                        data-bind-show="!isLoadingReductionCode && isLoadingReductionCodeError"
                                        data-bind="loadingReductionCodeErrorMessage">
@@ -509,11 +505,12 @@
                                 </div>
                             </div>
                             <div class="order-summary__nav field__input-btn-wrapper hide-on-mobile layout-flex--row-reverse">
-                                <button id="submitBtn" type="submit" class="btn btn-checkout spinner">
+                                <%--                                <button id="submitBtn" type="submit" class="btn btn-checkout spinner">--%>
+                                <%--                                    <span class="spinner-label">ĐẶT HÀNG</span>--%>
+                                <%--                                </button>--%>
+                                <button id="submitBtn" type="button" class="btn btn-checkout spinner">
                                     <span class="spinner-label">ĐẶT HÀNG</span>
                                 </button>
-
-
                                 <a href="${pageContext.request.contextPath}/cart/CartControl" class="previous-link">
                                     <span class="previous-link__content">Quay về giỏ hàng</span>
                                 </a>
@@ -827,6 +824,7 @@
                 });
         }
     }).render('#paypal-button-container')
+
     function isFormValid() {
         const email = document.getElementById('email').value;
         const billingName = document.getElementById('billingName').value;
@@ -835,6 +833,7 @@
         const billingProvince = document.getElementById('billingProvince').value;
         const billingDistrict = document.getElementById('billingDistrict').value;
         const billingWard = document.getElementById('billingWard').value;
+        const billSignature = document.getElementById('privateKey').value;
         if (
             email === '' ||
             billingName === '' ||
@@ -844,11 +843,48 @@
             billingDistrict === '' ||
             billingWard === ''
         ) {
-            return false;
+            return Promise.resolve(false);
+        }else{
+            return checkSignature(billSignature);
         }
-        return true;
     }
 
+    function checkSignature(key) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: "${pageContext.request.contextPath}/cart/CheckKeyControl",
+                type: "POST",
+                data: {
+                    key: key,
+                },
+                success: function (data) {
+                    let isVerify = JSON.parse(data).verify;
+                    let element = document.getElementById('error-key');
+                    if (isVerify) {
+                        element.innerText = '';
+                        resolve(true);
+                    } else {
+                        element.innerText = 'Private key không hợp lệ. Vui lòng kiểm tra lại!';
+                        resolve(false);
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                    reject(data);
+                }
+            });
+        });
+    }
+
+    document.getElementById('submitBtn').addEventListener('click', function (event) {
+        event.preventDefault();
+        isFormValid().then(isValid => {
+            if (!isValid) {
+            } else {
+                document.getElementById('form_submit').submit();
+            }
+        });
+    });
 </script>
 </body>
 </html>
