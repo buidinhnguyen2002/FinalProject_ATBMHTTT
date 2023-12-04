@@ -21,6 +21,7 @@ public class Order implements Serializable {
 	private String signature;
 	private int publicKeyId;
 	private String transactionId;
+	private double feeship;
 
     public Order(int id, Account account, double totalPrice) {
 		this.id=id;
@@ -31,9 +32,16 @@ public class Order implements Serializable {
 	public String getTransactionId() {
 		return transactionId;
 	}
-
 	public void setTransactionId(String transactionId) {
 		this.transactionId = transactionId;
+	}
+
+	public double getFeeship() {
+		return feeship;
+	}
+
+	public void setFeeship(double feeship) {
+		this.feeship = feeship;
 	}
 
 	public String getWardId() {

@@ -9,26 +9,26 @@ import com.paypal.payments.Refund;
 import java.io.IOException;
 
 public class PayPalRefundExample {
+    public static boolean refundPayPal(String transactionId){
+        try {
+            // Set your PayPal environment (sandbox or live)
+            PayPalEnvironment environment = new PayPalEnvironment.Sandbox(
+                    "Abo90Wztq8vanhzw0EO5zMhum7b1O6aI_1x4BTA8v7jqNIOGdthWxF-ZZpjhtEGg6CW0VWRdgg_hjdlb",
+                    "EEpPKUqIRD0gJPVKHVai84Yi0lauKUq3brqUN2AYkeIq1GHGbBJy_fA_q3bvj8Ha7cFZByFGKRvYyzro");
 
-    public static void main(String[] args) {
-        // Set your PayPal environment (sandbox or live)
-        PayPalEnvironment environment = new PayPalEnvironment.Sandbox(
-                "Abo90Wztq8vanhzw0EO5zMhum7b1O6aI_1x4BTA8v7jqNIOGdthWxF-ZZpjhtEGg6CW0VWRdgg_hjdlb",
-                "EEpPKUqIRD0gJPVKHVai84Yi0lauKUq3brqUN2AYkeIq1GHGbBJy_fA_q3bvj8Ha7cFZByFGKRvYyzro");
+            // Create a PayPal HTTP client
+            PayPalHttpClient client = new PayPalHttpClient(environment);
 
-        // Create a PayPal HTTP client
-        PayPalHttpClient client = new PayPalHttpClient(environment);
-
-        // Specify the capture ID you want to refund
-        String transactionId = "0S112562L79762423";
-
-        // Refund the capture
-        refundCapture(client, transactionId);
+            // Refund the capture
+            refundCapture(client, transactionId);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
-
     private static void refundCapture(PayPalHttpClient client, String captureId) {
         CapturesRefundRequest refundRequest = new CapturesRefundRequest(captureId);
-
         try {
             HttpResponse<Refund> refundResponse = client.execute(refundRequest);
             if (refundResponse.statusCode() == 201) {
@@ -40,5 +40,8 @@ public class PayPalRefundExample {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public static void main(String[] args) {
+        System.out.println(refundPayPal("3LF4637600885772A"));;
     }
 }

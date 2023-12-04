@@ -52,10 +52,10 @@ public class OrderDAO {
 
     public static void updateOrder(Order order) {
         Jdbi me = DBContext.me();
-        String query = "update orders set totalPrice = ?,sale=?,status=?,statusPay=?,address=?,note=?,wardId=?,districtId=?,signature=? where id = ?";
+        String query = "update orders set totalPrice = ?,sale=?,status=?,statusPay=?,address=?,note=?,wardId=?,districtId=?,signature=?,transactionId = ? , feeship = ? where id = ?";
         me.withHandle(handle -> handle.createUpdate(query).bind(0, order.getTotalPrice()).bind(1, order.getSale()).bind(2, order.getStatus()).
                 bind(3, order.getStatusPay()).bind(4, order.getAddress()).bind(5, order.getNote()).bind(6, order.getWardId()).
-                bind(7, order.getDistrictId()).bind(8, order.getSignature()).bind(9, order.getId()).execute());
+                bind(7, order.getDistrictId()).bind(8, order.getSignature()).bind(9,order.getTransactionId()).bind(10, order.getFeeship()).bind(11, order.getId()).execute());
     }
 
     public static void updateStatusOrder(String status, String id) {

@@ -122,6 +122,7 @@ public class AddToBillControl extends HttpServlet {
                 /// cap nhat lai bill de co tong gia tien
                 if (ship != null && !ship.isEmpty()) {
                     order.setTotalPrice(total + Integer.parseInt(ship)); // vi du cua phi van chyen
+                    order.setFeeship(Double.parseDouble(ship));
                 }
                 order.setNote(request.getParameter("note"));
                 order.setWardId(wardId);
