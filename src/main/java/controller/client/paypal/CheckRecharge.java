@@ -43,11 +43,14 @@ public class CheckRecharge extends HttpServlet {
         try {
             HttpResponse<Order> response1 = client.execute(request1);
             if (response1.statusCode() == 201) {
-                System.out.println(response1.statusCode());
                 Order capturedOrder = response1.result();
+                // Extract Transaction ID from the captured order
+                String transactionId = capturedOrder.purchaseUnits().get(0).payments().captures().get(0).id();
+                System.out.println("Transaction ID: " + transactionId);
                 HttpSession session = request.getSession();
                 Account user = (Account) session.getAttribute("acc");
                 session.setAttribute("isPay","Payed");
+                session.setAttribute("transactionId",transactionId);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write(new Gson().toJson(capturedOrder));

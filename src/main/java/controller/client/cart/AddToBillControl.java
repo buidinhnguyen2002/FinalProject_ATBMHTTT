@@ -69,11 +69,14 @@ public class AddToBillControl extends HttpServlet {
 //                add id account
                 order.setIdAccount(account.getId());
                 String statusPay = (String) session.getAttribute("isPay");
+                String transactionId = "";
                 if (statusPay == null) {
                     order.setStatusPay("Chưa thanh toán");
                 } else {
                     if (session.getAttribute("isPay").equals("Payed")) {
                         order.setStatusPay("Đã thanh toán");
+                        transactionId = (String) session.getAttribute("transactionId");
+                        order.setTransactionId(transactionId);
                     }
                 }
                 String address = request.getParameter("billingAddress");
