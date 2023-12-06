@@ -63,10 +63,15 @@ public class OrderDAO {
         String query = "update orders set status = ?  where id = ?";
         me.withHandle(handle -> handle.createUpdate(query).bind(0, status).bind(1, id).execute());
     }
+    public static void updateStatusPayOrder(String statusPay, String id) {
+        Jdbi me = DBContext.me();
+        String query = "update orders set statusPay = ?  where id = ?";
+        me.withHandle(handle -> handle.createUpdate(query).bind(0, statusPay).bind(1, id).execute());
+    }
 
     public static Order getOrderByBid(String id) {
         Jdbi me = DBContext.me();
-        String query = "select id,createAt,deliveryAt,statusPay,idAccount,sale,totalPrice,status,address,note, wardId, districtId,idEmployee,updateAt,publicKeyId from orders where id = ?";
+        String query = "select id,createAt,deliveryAt,statusPay,idAccount,sale,totalPrice,status,address,note, wardId, districtId,idEmployee,updateAt,publicKeyId,transactionId from orders where id = ?";
         Order order = me.withHandle(handle -> handle.createQuery(query).bind(0, id).mapToBean(Order.class).one());
         order.setAccount(UtilDAO.findAccountById(order.getIdAccount()));
         return order;
@@ -132,7 +137,7 @@ public static String getCreateAtOrder(int id) {
 //        System.out.println(getOrderDetailByBid("135"));
 //       System.out.println(getOrderDetailByBid("133"));
 //       System.out.println(getPublicKeyById(1));
-        System.out.println(getCreateAtOrder(146));
+       updateStatusPayOrder("Đã hoàn tiền","174");
     }
 
 }

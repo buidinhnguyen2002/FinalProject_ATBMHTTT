@@ -143,11 +143,6 @@
                                                     onclick="transport(${o.id},this)" title="Đăng ký vận chuyển"><i
                                                     class="fa fa-truck"></i></button>
                                         </c:if>
-                                        <c:if test="${o.status=='Đã hủy'}">
-                                            <button class="btn btn-primary btn-sm cancel" type="button"
-                                                    onclick="back(${o.id},this)"
-                                                    title="Khôi phục đơn hàng"><i class="fa fa-repeat"></i></button>
-                                        </c:if>
                                         <c:if test="${o.status=='Đang vận chuyển'}">
                                             <button class="btn btn-primary btn-sm cancel" type="button"
                                                     onclick="success(${o.id},this)"
@@ -358,7 +353,6 @@
                         let isSuc = JSON.parse(data).isSuc;
                         if (isSuc) {
                             $(tdArray[9]).html('<span class="badge bg-danger"">Đã hủy</span>');
-                            $(parent).html('<button class="btn btn-primary btn-sm cancel" type="button" onclick="back(' + orderId + ',this)" title="Khôi phục đơn hàng"><i class="fa fa-repeat"></i></button>');
                         }
                         Swal.fire('Hủy đơn hàng thành công', '', 'success');
                     },
@@ -372,48 +366,6 @@
                 // Nếu người dùng chọn "No"
                 // Hiển thị thông báo không xóa user bằng SweetAlert2
                 Swal.fire('Không hủy đơn hàng', '', 'info');
-            }
-        })
-    }
-
-    function back(orderId, button) {
-        let tr = $(button).closest("tr");
-        let tdArray = $(tr).find("td");
-        let parent = $(button).closest(".button-container");
-        Swal.fire({
-            title: 'Bạn có chắc chắn muốn khôi phục đơn hàng này?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: "${pageContext.request.contextPath}/admin-bill/BillManagerController",
-                    type: "post",
-                    data: {
-                        orderId: orderId,
-                        type: 'back'
-                    },
-                    success: function (data) {
-                        let isSuc = JSON.parse(data).isSuc;
-                        if (isSuc) {
-                            $(tdArray[9]).html('<span class="badge bg-primary"">Đã xác nhận</span>');
-                            $(parent).html('<button class="btn btn-primary btn-sm register" type="button"  onclick="transport(' + orderId + ',this)" title="Đăng ký vận chuyển"><i class="fa fa-truck"></i></button>' +
-                                ' <button class="btn btn-primary btn-sm cancel" onclick="deny(' + orderId + ',this)" type="button" title="Hủy đơn hàng"><i class="fas fa-times"></i></button>')
-                        }
-                        Swal.fire('Khôi phục đơn hàng thành công', '', 'success');
-                    },
-                    error: function (data) {
-                        console.log(data)
-                    }
-                });
-
-
-            } else if (result.isDenied) {
-                // Nếu người dùng chọn "No"
-                // Hiển thị thông báo không xóa user bằng SweetAlert2
-                Swal.fire('Không khôi phục đơn hàng', '', 'info');
             }
         })
     }
