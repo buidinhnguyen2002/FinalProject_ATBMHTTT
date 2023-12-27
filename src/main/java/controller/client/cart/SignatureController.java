@@ -36,7 +36,7 @@ public class SignatureController extends HttpServlet {
         String id = req.getParameter("id");
         Order order = OrderDAO.getOrderByBid(id);
         order.setAccount(account);
-        List<PublicKeyUser> publicKeyUsers = OrderDAO.getPublicKeyById(idAccount, order.getCreateAt());
+        List<PublicKeyUser> publicKeyUsers = OrderDAO.getPublicKeyById(order.getIdAccount(), order.getCreateAt());
         order.setOrderDetails(OrderDAO.getOrderDetailByBid(id));
         String signature = OrderDAO.getSignatureById(Integer.parseInt(id));
         String data = order.orderInfo();
