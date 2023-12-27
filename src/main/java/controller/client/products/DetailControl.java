@@ -60,7 +60,6 @@ public class DetailControl extends HttpServlet {
                     }
                 }
                 String rate = UtilDAO.RatesByIdProductAndIdAccount(String.valueOf(account.getId()), id);
-                System.out.println(isSucPay);
                 request.setAttribute("rate", rate);
                 request.setAttribute("isSucPay", isSucPay);
             }

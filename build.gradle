@@ -103,7 +103,7 @@ tasks.withType(JavaCompile) {
 }
 
 task docker_deploy {
-    docker_deploy.dependsOn docker_app_start
+//    docker_deploy.dependsOn docker_app_start
     docker_deploy.dependsOn docker_upload_file_to_server
     docker_deploy.dependsOn build
     tasks.getByName('docker_app_start').mustRunAfter docker_upload_file_to_server

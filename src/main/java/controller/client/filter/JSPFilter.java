@@ -31,6 +31,7 @@ public class JSPFilter implements Filter {
 				&& !requestURI.endsWith("/Register.jsp")
 				&& !requestURI.endsWith("/Contact.jsp")
 				&& !requestURI.endsWith("/Account.jsp")
+				&& !requestURI.endsWith("/Index.jsp")
 				&& !requestURI.endsWith("/Service.jsp")&& !requestURI.endsWith("/login.jsp")&& !requestURI.endsWith("/admin-login.jsp")) {
 			httpResponse.sendRedirect(httpRequest.getContextPath() + "/IndexControl");
 

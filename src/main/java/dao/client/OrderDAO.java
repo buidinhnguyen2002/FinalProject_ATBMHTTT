@@ -52,10 +52,10 @@ public class OrderDAO {
 
     public static void updateOrder(Order order) {
         Jdbi me = DBContext.me();
-        String query = "update orders set totalPrice = ?,sale=?,status=?,statusPay=?,address=?,note=?,wardId=?,districtId=?,signature=? where id = ?";
+        String query = "update orders set totalPrice = ?,sale=?,status=?,statusPay=?,address=?,note=?,wardId=?,districtId=?,signature=?,transactionId = ? , feeship = ? where id = ?";
         me.withHandle(handle -> handle.createUpdate(query).bind(0, order.getTotalPrice()).bind(1, order.getSale()).bind(2, order.getStatus()).
                 bind(3, order.getStatusPay()).bind(4, order.getAddress()).bind(5, order.getNote()).bind(6, order.getWardId()).
-                bind(7, order.getDistrictId()).bind(8, order.getSignature()).bind(9, order.getId()).execute());
+                bind(7, order.getDistrictId()).bind(8, order.getSignature()).bind(9,order.getTransactionId()).bind(10, order.getFeeship()).bind(11, order.getId()).execute());
     }
 
     public static void updateStatusOrder(String status, String id) {
@@ -63,10 +63,15 @@ public class OrderDAO {
         String query = "update orders set status = ?  where id = ?";
         me.withHandle(handle -> handle.createUpdate(query).bind(0, status).bind(1, id).execute());
     }
+    public static void updateStatusPayOrder(String statusPay, String id) {
+        Jdbi me = DBContext.me();
+        String query = "update orders set statusPay = ?  where id = ?";
+        me.withHandle(handle -> handle.createUpdate(query).bind(0, statusPay).bind(1, id).execute());
+    }
 
     public static Order getOrderByBid(String id) {
         Jdbi me = DBContext.me();
-        String query = "select id,createAt,deliveryAt,statusPay,idAccount,sale,totalPrice,status,address,note, wardId, districtId,idEmployee,updateAt,publicKeyId from orders where id = ?";
+        String query = "select id,createAt,deliveryAt,statusPay,idAccount,sale,totalPrice,status,address,note, wardId, districtId,idEmployee,updateAt,publicKeyId,transactionId from orders where id = ?";
         Order order = me.withHandle(handle -> handle.createQuery(query).bind(0, id).mapToBean(Order.class).one());
         order.setAccount(UtilDAO.findAccountById(order.getIdAccount()));
         return order;
@@ -132,7 +137,7 @@ public static String getCreateAtOrder(int id) {
 //        System.out.println(getOrderDetailByBid("135"));
 //       System.out.println(getOrderDetailByBid("133"));
 //       System.out.println(getPublicKeyById(1));
-        System.out.println(getCreateAtOrder(146));
+       updateStatusPayOrder("Đã hoàn tiền","174");
     }
 
 }

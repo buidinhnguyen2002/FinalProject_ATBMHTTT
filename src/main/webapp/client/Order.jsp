@@ -22,7 +22,7 @@
           href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css"
           integrity="sha384-QYIZto+st3yW+o8+5OHfT6S482Zsvz2WfOzpFSXMF9zqeLcFV0/wlZpMtyFcZALm" crossorigin="anonymous">
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}//client/assets/css/checkout.vendor.min.css?v=4fcd86c">
+          href="${pageContext.request.contextPath}/client/assets/css/checkout.vendor.min.css?v=4fcd86c">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/client/assets/css/checkout.min.css?v=17ca415">
     <script src="//bizweb.dktcdn.net/assets/themes_support/libphonenumber-v3.2.30.min.js?1564585558451"></script>
     <script src="${pageContext.request.contextPath}/client/assets/js/checkout.vendor.min.js?v=11006c9"></script>
@@ -190,7 +190,7 @@
                                                         size="1"
                                                         class="field__input field__input--select"
                                                         required="">
-                                                    <option value="">Quận / Huyện</option>
+                                                    <option value="">Huyện / Quận</option>
 
                                                 </select>
                                             </div>
@@ -198,7 +198,7 @@
                                         <div class="field field--show-floating-label ">
                                             <div class="field__input-wrapper field__input-wrapper--select2">
                                                 <label for="billingWard" class="field__label">
-                                                    Xã / Thị trấn (tùy chọn)
+                                                    Xã / Phường
                                                 </label>
                                                 <select name="calc_shipping_ward"
                                                         id="billingWard"
@@ -409,7 +409,7 @@
                                                 </th>
                                                 <td class="product__quantity visually-hidden"><em>Số
                                                     lượng:</em> ${o.quantity}</td>
-                                                <td class="product__price">
+                                                <td class="product__price priceSystas">
                                                         ${o.price * o.quantity}
                                                 </td>
                                             </tr>
@@ -454,7 +454,7 @@
                                     <thead>
                                     <tr>
                                         <td><span class="visually-hidden">Mô tả</span></td>
-                                        <td><span class="visually-hidden">Giá tiền</span></td>
+                                        <td><span class="visually-hidden priceSystas">Giá tiền</span></td>
                                     </tr>
                                     </thead>
                                     <tbody class="total-line-table__tbody">
@@ -462,7 +462,7 @@
                                         <th class="total-line__name">
                                             Tạm tính
                                         </th>
-                                        <td id="provisional" class="total-line__price">${total}</td>
+                                        <td id="provisional" class="total-line__price priceSystas">${total}</td>
                                     </tr>
 
                                     <tr class="total-line total-line--shipping-fee">
@@ -483,7 +483,7 @@
 													</span>
                                         </th>
                                         <td class="total-line__price">
-                                            <span id="totalId" class="payment-due__price">${total} </span>
+                                            <span id="totalId" class="payment-due__price priceSystas">${total} </span>
                                         </td>
                                     </tr>
                                     </tfoot>
@@ -616,9 +616,6 @@
 
 
     let token = '<%= api.getToken() %>';
-    let provinceUrl = 'http://140.238.54.136/api/province';
-    let districtUrl = 'http://140.238.54.136/api/district';
-    let wardUrl = 'http://140.238.54.136/api/ward';
     let selectProvinceElement = document.getElementById('billingProvince');
     let selectDistrictElement = document.getElementById('billingDistrict');
     let selectWardElement = document.getElementById('billingWard');
@@ -626,19 +623,22 @@
     let districtId = -1;
     let wardId = -1
     // Lấy danh sách các tỉnh
-    fetch(provinceUrl, {
+
+    fetch(`https://provinces.open-api.vn/api/`, {
         method: 'GET',
-        headers: {
-            'Authorization': `Bearer ` + token + ``
-        }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             // Xử lý dữ liệu ở đây
-            data.original.data.forEach(province => {
+            data.forEach(province => {
                 const option = document.createElement('option');
-                option.value = province.ProvinceID;
-                option.text = province.ProvinceName;
+                option.value = province.code;
+                option.text = province.name;
                 selectProvinceElement.appendChild(option);
             });
         })
@@ -647,24 +647,22 @@
             console.error(error);
         });
 
+
     // Lấy danh sách các huyện khi chọn tỉnh
     selectProvinceElement.addEventListener('change', (event) => {
-        provinceId = event.target.value;
-        fetch(`http://140.238.54.136/api/district?provinceID=` + provinceId + ``, {
+        const provinceId = event.target.value;
+        fetch(`https://provinces.open-api.vn/api/p/` + provinceId + `?depth=2`, {
             method: 'GET',
-            headers: {
-                'Authorization': `Bearer ` + token + ``
-            }
         })
             .then(response => response.json())
             .then(data => {
                 // Xử lý dữ liệu ở đây
                 selectDistrictElement.innerHTML = '<option value="" selected>Huyện / Quận</option>';
                 selectWardElement.innerHTML = '<option value="" selected>Xã / Phường</option>';
-                data.original.data.forEach(district => {
+                data.districts.forEach(district => {
                     const option = document.createElement('option');
-                    option.value = district.DistrictID;
-                    option.text = district.DistrictName;
+                    option.value = district.code;  // Assuming this is the correct property name in your JSON
+                    option.text = district.name;   // Assuming this is the correct property name in your JSON
                     selectDistrictElement.appendChild(option);
                 });
             })
@@ -674,31 +672,36 @@
             });
     });
 
+
     // Lấy danh sách các xã khi chọn huyện
     selectDistrictElement.addEventListener('change', (event) => {
         districtId = event.target.value;
-        fetch(`http://140.238.54.136/api/ward?districtID=` + districtId + ``, {
+        console.log(`https://provinces.open-api.vn/api/d/` + districtId + `?depth=2`);
+        fetch(`https://provinces.open-api.vn/api/d/` + districtId + `?depth=2`, {
             method: 'GET',
-            headers: {
-                'Authorization': `Bearer ` + token + ``
-            }
         })
             .then(response => response.json())
             .then(data => {
                 // Xử lý dữ liệu ở đây
                 selectWardElement.innerHTML = '<option value="" selected>Xã / Phường</option>';
-                data.original.data.forEach(ward => {
-                    const option = document.createElement('option');
-                    option.value = ward.WardCode;
-                    option.text = ward.WardName;
-                    selectWardElement.appendChild(option);
-                });
+
+                if (data && data.wards) {
+                    data.wards.forEach(ward => {
+                        const option = document.createElement('option');
+                        option.value = ward.code;  // Assuming this is the correct property name in your JSON
+                        option.text = ward.name;   // Assuming this is the correct property name in your JSON
+                        selectWardElement.appendChild(option);
+                    });
+                } else {
+                    console.error("Data or wards array is undefined");
+                }
             })
             .catch(error => {
                 // Xử lý lỗi ở đây
                 console.error(error);
             });
     });
+
     selectWardElement.addEventListener('change', (event) => {
         wardId = event.target.value;
         document.getElementById("submitBtn").disabled = true; // Disable the submit button
@@ -885,6 +888,31 @@
             }
         });
     });
+</script>
+<script>
+    function formatPriceElements() {
+        const priceElements = document.getElementsByClassName('priceSystas');
+
+        for (let i = 0; i < priceElements.length; i++) {
+            const priceString = priceElements[i].innerText;
+            const formattedPrice = formatNumberWithCommas(priceString).replace(/,/g, '.') + ' đ';
+            priceElements[i].innerText = formattedPrice;
+        }
+    }
+
+    function formatNumberWithCommas(numberString) {
+        const number = parseFloat(numberString);
+
+        if (isNaN(number)) {
+            return "Invalid number";
+        }
+
+        const formattedNumber = number.toLocaleString('en-US');
+        return formattedNumber;
+    }
+
+    // Gọi hàm để chuyển đổi các thành phần có lớp "price"
+    formatPriceElements();
 </script>
 </body>
 </html>
