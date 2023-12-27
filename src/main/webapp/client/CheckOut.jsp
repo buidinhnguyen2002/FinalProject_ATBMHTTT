@@ -170,7 +170,7 @@
                                                         </th>
                                                         <td class="product__quantity visually-hidden"><em>Số
                                                             lượng:</em> ${o.quantity}</td>
-                                                        <td class="product__price">
+                                                        <td class="product__price priceSystas">
                                                                 ${o.price * o.quantity}
                                                         </td>
                                                     </tr>
@@ -186,12 +186,12 @@
 
                                             <tr class="total-line total-line--subtotal">
                                                 <th class="total-line__name">Tạm tính</th>
-                                                <td class="total-line__price">${requestScope.order.totalPrice-requestScope.ship}₫</td>
+                                                <td class="total-line__price priceSystas">${requestScope.order.totalPrice-requestScope.ship}₫</td>
                                             </tr>
 
                                             <tr class="total-line total-line--shipping-fee">
                                                 <th class="total-line__name">Phí vận chuyển</th>
-                                                <td class="total-line__price">
+                                                <td class="total-line__price priceSystas">
 
                                                     ${requestScope.ship}
 
@@ -209,7 +209,7 @@
                                                     <span class="payment-due__label-total">Tổng cộng</span>
                                                 </th>
                                                 <td class="total-line__price">
-                                                    <span class="payment-due__price">${requestScope.order.totalPrice}₫</span>
+                                                    <span class="payment-due__price priceSystas">${requestScope.order.totalPrice}₫</span>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -279,5 +279,30 @@
         </div>
     </form>
 </div>
+<script>
+    function formatPriceElements() {
+        const priceElements = document.getElementsByClassName('priceSystas');
+
+        for (let i = 0; i < priceElements.length; i++) {
+            const priceString = priceElements[i].innerText;
+            const formattedPrice = formatNumberWithCommas(priceString).replace(/,/g, '.') + ' đ';
+            priceElements[i].innerText = formattedPrice;
+        }
+    }
+
+    function formatNumberWithCommas(numberString) {
+        const number = parseFloat(numberString);
+
+        if (isNaN(number)) {
+            return "Invalid number";
+        }
+
+        const formattedNumber = number.toLocaleString('en-US');
+        return formattedNumber;
+    }
+
+    // Gọi hàm để chuyển đổi các thành phần có lớp "price"
+    formatPriceElements();
+</script>
 </body>
 </html>

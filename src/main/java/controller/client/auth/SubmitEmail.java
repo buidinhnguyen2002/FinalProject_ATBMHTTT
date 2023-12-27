@@ -3,6 +3,9 @@ package controller.client.auth;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +16,8 @@ import javax.servlet.http.HttpSession;
 
 import dao.client.AuthDAO;
 import entity.Account;
+import entity.RSA;
+import util.SendEmail;
 import util.VerifyRecaptchas;
 
 /**
@@ -28,6 +33,7 @@ public class SubmitEmail extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		HttpSession session = request.getSession();
 		Account customer = (Account) session.getAttribute("custemp");
+		String email = request.getParameter("email");
 		String codeverify = request.getParameter("codeverify");
 		boolean checkCustommerExits = AuthDAO.checkAccountExist(customer.getAccountName());
 		boolean checkCustommerExitss = AuthDAO.checkAccountExist(customer.getEmail());
@@ -47,8 +53,11 @@ public class SubmitEmail extends HttpServlet {
 			request.setAttribute("error", "Mã xác thực không chính xác!");
 			request.getRequestDispatcher("/client/VerifyEmail.jsp").forward(request, response);
 		} else if (!checkCustommerExits && !checkCustommerExitss) {
+			RSA rsa = new RSA(2048);
+			String publicKey = rsa.exportPublicKey();
+			SendEmail.sendMailKey(email, publicKey, rsa.exportPrivateKey());
 			AuthDAO.signUp(customer.getAccountName(), customer.getPassword(), customer.getFullName(), customer.getEmail(),
-					customer.getAddress(), customer.getPhone());
+					customer.getAddress(), customer.getPhone(), publicKey);
 			request.getRequestDispatcher("/client/Login.jsp").forward(request, response);
 		}
 

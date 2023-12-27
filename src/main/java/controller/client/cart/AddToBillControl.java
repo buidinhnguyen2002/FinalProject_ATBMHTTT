@@ -1,7 +1,9 @@
 package controller.client.cart;
 
 import java.io.IOException;
+import java.security.Signature;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +18,7 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dao.client.OrderDAO;
-import entity.Account;
-import entity.Order;
-import entity.OrderDetail;
+import entity.*;
 import util.API;
 
 @WebServlet("/cart/AddBillControl")
@@ -48,7 +48,7 @@ public class AddToBillControl extends HttpServlet {
             String districtId = request.getParameter("calc_shipping_district");
             String wardId = request.getParameter("calc_shipping_ward");
             String reductionCode = request.getParameter("reductionCode");
-            boolean isSuc = false;
+            String privateKey = request.getParameter("privateKey");
             int idProductSizeColor;
             int quantitySizeColor;
             int newQuantitySizeColor = 0;
@@ -62,13 +62,21 @@ public class AddToBillControl extends HttpServlet {
                 order.setAccount(account);
                 order.setStatus("Đang xử lý");
                 int idOrder = OrderDAO.createOrder(order.getAccount().getId());
+//                order = OrderDAO.createOrder(order.getAccount().getId());
+                String createAt = OrderDAO.getCreateAtOrder(idOrder);
                 order.setId(idOrder);
+                order.setCreateAt(createAt);
+//                add id account
+                order.setIdAccount(account.getId());
                 String statusPay = (String) session.getAttribute("isPay");
+                String transactionId = "";
                 if (statusPay == null) {
                     order.setStatusPay("Chưa thanh toán");
                 } else {
                     if (session.getAttribute("isPay").equals("Payed")) {
                         order.setStatusPay("Đã thanh toán");
+                        transactionId = (String) session.getAttribute("transactionId");
+                        order.setTransactionId(transactionId);
                     }
                 }
                 String address = request.getParameter("billingAddress");
@@ -77,7 +85,7 @@ public class AddToBillControl extends HttpServlet {
                 } else {
                     order.setAddress(account.getAddress());
                 }
-
+                List<OrderDetail> myOrderDetails = new ArrayList<>();
                 float total = 0;// tinh tong gia
                 for (Map.Entry<String, List<OrderDetail>> entry : map.entrySet()) {
                     List<OrderDetail> orderDetails = entry.getValue();
@@ -89,7 +97,9 @@ public class AddToBillControl extends HttpServlet {
                         newQuantitySizeColor = quantitySizeColor - orderDetail.getQuantity();
                         if (newQuantitySizeColor >= 0) {
                             // luu lai cac mat hang
-                            OrderDAO.createOrderDetail(orderDetail);
+                            int orderDetailId = OrderDAO.createOrderDetail(orderDetail);
+                            orderDetail.setId(orderDetailId);
+                            orderDetail.setIdProduct(orderDetail.getProduct().getId());
                             OrderDAO.updateInventoryProduct(String.valueOf(orderDetail.getProduct().getId()), newQuantitySizeColor, idProductSizeColor);
                         } else {
                             OrderDAO.deleteOrder(idOrder);
@@ -106,14 +116,22 @@ public class AddToBillControl extends HttpServlet {
                             total = total - (total * ((float) discount / 100));
                         }
                     }
+                    myOrderDetails.addAll(orderDetails);
                 }
+                order.setOrderDetails(myOrderDetails);
                 /// cap nhat lai bill de co tong gia tien
                 if (ship != null && !ship.isEmpty()) {
                     order.setTotalPrice(total + Integer.parseInt(ship)); // vi du cua phi van chyen
+                    order.setFeeship(Double.parseDouble(ship));
                 }
                 order.setNote(request.getParameter("note"));
                 order.setWardId(wardId);
                 order.setDistrictId(districtId);
+                String orderInfo  = order.orderInfo();
+                String hashOrder = SHA.hashText(orderInfo);
+                System.out.print("My order: "+orderInfo);
+                String signature = ElectronicSignature.doSignature(privateKey, orderInfo);
+                order.setSignature(signature);
                 OrderDAO.updateOrder(order);
                 request.setAttribute("order", order);
                 request.setAttribute("ship", ship);

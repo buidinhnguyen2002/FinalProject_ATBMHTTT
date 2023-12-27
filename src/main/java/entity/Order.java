@@ -18,6 +18,10 @@ public class Order implements Serializable {
 	private String updateAt; // ngay mua
 	private String wardId;
 	private String districtId;
+	private String signature;
+	private int publicKeyId;
+	private String transactionId;
+	private double feeship;
 
     public Order(int id, Account account, double totalPrice) {
 		this.id=id;
@@ -25,7 +29,22 @@ public class Order implements Serializable {
 		this.totalPrice = totalPrice;
     }
 
-    public String getWardId() {
+	public String getTransactionId() {
+		return transactionId;
+	}
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
+	}
+
+	public double getFeeship() {
+		return feeship;
+	}
+
+	public void setFeeship(double feeship) {
+		this.feeship = feeship;
+	}
+
+	public String getWardId() {
 		return wardId;
 	}
 
@@ -226,6 +245,22 @@ public class Order implements Serializable {
 		this.orderDetails = orderDetails;
 	}
 
+	public String getSignature() {
+		return signature;
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
+
+	public int getPublicKeyId() {
+		return publicKeyId;
+	}
+
+	public void setPublicKeyId(int publicKeyId) {
+		this.publicKeyId = publicKeyId;
+	}
+
 	@Override
 	public String toString() {
 		return "Order{" +
@@ -241,6 +276,43 @@ public class Order implements Serializable {
 				", address='" + address + '\'' +
 				", note='" + note + '\'' +
 				", updateAt='" + updateAt + '\'' +
+				", wardId='" + wardId + '\'' +
+				", districtId='" + districtId + '\'' +
+				", signature='" + signature + '\'' +
+				", publicKeyId=" + publicKeyId +
+				", transactionId='" + transactionId + '\'' +
+				", orderDetails=" + orderDetails +
+				'}';
+	}
+
+	public Order(int id, String createAt, String deliveryAt, String statusPay, int idAccount,
+				 double sale, double totalPrice, String address, String note, String wardId, String districtId,
+				 List<OrderDetail> orderDetails) {
+		this.id = id;
+		this.createAt = createAt;
+		this.deliveryAt = deliveryAt;
+		this.statusPay = statusPay;
+		this.idAccount = idAccount;
+		this.sale = sale;
+		this.totalPrice = totalPrice;
+		this.address = address;
+		this.note = note;
+		this.wardId = wardId;
+		this.districtId = districtId;
+		this.orderDetails = orderDetails;
+	}
+	public String orderInfo(){
+		return "Order{" +
+				"id=" + id +
+				", createAt='" + createAt + '\'' +
+				", deliveryAt='" + deliveryAt + '\'' +
+				", statusPay='" + statusPay + '\'' +
+				", idAccount=" + idAccount +
+//				", account=" + account +
+				", sale=" + sale +
+				", totalPrice=" + totalPrice +
+				", address='" + address + '\'' +
+				", note='" + note + '\'' +
 				", wardId='" + wardId + '\'' +
 				", districtId='" + districtId + '\'' +
 				", orderDetails=" + orderDetails +

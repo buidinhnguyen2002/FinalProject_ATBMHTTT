@@ -1,5 +1,7 @@
 package util;
 
+import entity.RSA;
+
 import java.util.Date;
 import java.util.Properties;
 
@@ -78,9 +80,52 @@ public class SendEmail {
 			e.printStackTrace();
 		}
 	}
+	public static void sendMailKey(String addressTo, String publicKey, String privateKey) {
+		// khai báo
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.port", "587");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+
+		// Tao auth
+		Authenticator auth = new Authenticator() {
+			@Override
+			protected PasswordAuthentication getPasswordAuthentication() {
+				// TODO Auto-generated method stub
+				return new PasswordAuthentication(from, password);
+			}
+
+		};
+		// phiên làm việc
+		Session session = Session.getInstance(props, auth);
+		// Gửi Email
+
+		// Tạo một tin nhắn
+		MimeMessage msg = new MimeMessage(session);
+		try {
+			msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
+			msg.setFrom(new InternetAddress(from, "HaLo's Shop"));
+			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(addressTo, false));
+			msg.setSubject("HaLo's Shop");
+			msg.setSentDate(new Date());
+			// Nội dung
+
+//			msg.setText("Public key: " + publicKey + "\nPrivate key: " + privateKey, "UTF-8");
+			msg.setContent("<p><strong>Public key:</strong> " + publicKey + "</p><p><strong>Private key:</strong> " + privateKey + "</p>", "text/html; charset=UTF-8");
+			// Gửi mail
+			Transport.send(msg);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
 
 	public static void main(String[] args) {
 //		sendMailFogetPassWord("leminhlongit@gmail.com", "KHASasd");
-		
+//		RSA rsa = new RSA(2048);
+//		String publicKey = rsa.exportPublicKey();
+//		System.out.println(publicKey);
+//		SendEmail.sendMailKey("anhtuvuonga1@gmail.com", publicKey, rsa.exportPrivateKey());
 	}
 }

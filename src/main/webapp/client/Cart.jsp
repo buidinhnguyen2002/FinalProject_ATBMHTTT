@@ -23,6 +23,7 @@
     <jsp:include page="./link/Link.jsp"></jsp:include>
     <link rel="stylesheet" type="text/css"
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
 </head>
 
 
@@ -159,6 +160,7 @@
                                     <th>Trạng thái thanh toán</th>
                                     <th>Trạng thái vận chuyển</th>
                                     <th>Tính năng</th>
+                                    <th>Xác thực đơn hàng</th>
                                 </tr>
                                 </thead>
                                 <tbody id="renderListAccount">
@@ -181,6 +183,7 @@
                                         <td width="70" class="priceSystas" style="text-align: right;">${o.totalPrice}</td>
                                         <c:if test="${o.statusPay=='Đã thanh toán'}"><td style="color: #0aa60f">${o.statusPay}</td></c:if>
                                         <c:if test="${o.statusPay=='Chưa thanh toán'}"><td style="color: #0f2094">${o.statusPay}</td></c:if>
+                                        <c:if test="${o.statusPay=='Đã hoàn tiền'}"><td style="color: #0aa60f">${o.statusPay}</td></c:if>
                                         <td>
                                             <c:if test="${o.status=='Đang xử lý'}">
                                                 <span class="badge bg-warning" style="background-color: yellow">${o.status}</span>
@@ -203,6 +206,11 @@
                                                 href="${pageContext.request.contextPath}/cart/DetailBill?id=${o.id}">
                                             <fmt:message
                                                     key="click.to.view" bundle="${lang}"></fmt:message></a></td>
+                                        <td class="text-center" style="display: flex; flex-direction: row; justify-content: center;align-items: center">
+                                            <button class="btn btn-success" style="border-radius: 10px; font-size: 12px;" onfocus="this.style.outline='none'" onclick="checkSignature(${o.id})">Verify</button>
+<%--                                            <span id="verify"></span>--%>
+                                            <span id="verify-${o.id}"></span>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
@@ -227,6 +235,31 @@
                 icon: 'error',
                 title: 'Oops...',
                 text: error,
+            });
+        }
+        function checkSignature(id){
+            $.ajax({
+                url: "${pageContext.request.contextPath}/cart/SignatureController",
+                type: "POST",
+                data: {
+                    id: id,
+                },
+                success: function (data) {
+                    let isVerify = JSON.parse(data).verify;
+                    // Thay đổi
+                    // let elementId = "verify";
+                    let elementId = "verify-"+id;
+                    let verifyElement = document.getElementById(elementId);
+                    if (isVerify) {
+                        // verifyElement.innerText = "Chữ ký hợp lệ";
+                        verifyElement.innerHTML = '<i style="color: #0aa60f; font-size: 20px" class="bi bi-check-lg"></i>';
+                    } else {
+                        verifyElement.innerHTML = '<i style="color: red; font-size: 20px" class="bi bi-x-lg"></i>';
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
             });
         }
 
