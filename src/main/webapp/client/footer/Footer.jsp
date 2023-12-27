@@ -138,12 +138,12 @@
         ©
         <fmt:message key="Copyright.by.web.developers" bundle="${lang}"></fmt:message>
         <a href="https://www.facebook.com/leminh.long.9678/" title="author"
-           rel="nofollow">Lê Minh Long</a> & <a
+           rel="nofollow">Lê Minh Lo</a> & <a
             href="https://www.facebook.com/Thuy.Hao.15622RynViaKingdom"
             title="author" rel="nofollow">La Thị Thúy Hảo</a>
         & <a
             href="https://www.facebook.com/profile.php?id=100024198831345"
-            title="author" rel="nofollow">Mai Hữu Lộc</a>
+            title="author" rel="nofollow">Bùi Đình Nguyên</a>
     </div>
 </footer>
 <script>
