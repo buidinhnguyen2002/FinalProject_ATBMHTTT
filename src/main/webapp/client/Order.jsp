@@ -409,7 +409,7 @@
                                                 </th>
                                                 <td class="product__quantity visually-hidden"><em>Số
                                                     lượng:</em> ${o.quantity}</td>
-                                                <td class="product__price">
+                                                <td class="product__price priceSystas">
                                                         ${o.price * o.quantity}
                                                 </td>
                                             </tr>
@@ -454,7 +454,7 @@
                                     <thead>
                                     <tr>
                                         <td><span class="visually-hidden">Mô tả</span></td>
-                                        <td><span class="visually-hidden">Giá tiền</span></td>
+                                        <td><span class="visually-hidden priceSystas">Giá tiền</span></td>
                                     </tr>
                                     </thead>
                                     <tbody class="total-line-table__tbody">
@@ -462,7 +462,7 @@
                                         <th class="total-line__name">
                                             Tạm tính
                                         </th>
-                                        <td id="provisional" class="total-line__price">${total}</td>
+                                        <td id="provisional" class="total-line__price priceSystas">${total}</td>
                                     </tr>
 
                                     <tr class="total-line total-line--shipping-fee">
@@ -483,7 +483,7 @@
 													</span>
                                         </th>
                                         <td class="total-line__price">
-                                            <span id="totalId" class="payment-due__price">${total} </span>
+                                            <span id="totalId" class="payment-due__price priceSystas">${total} </span>
                                         </td>
                                     </tr>
                                     </tfoot>
@@ -888,6 +888,31 @@
             }
         });
     });
+</script>
+<script>
+    function formatPriceElements() {
+        const priceElements = document.getElementsByClassName('priceSystas');
+
+        for (let i = 0; i < priceElements.length; i++) {
+            const priceString = priceElements[i].innerText;
+            const formattedPrice = formatNumberWithCommas(priceString).replace(/,/g, '.') + ' đ';
+            priceElements[i].innerText = formattedPrice;
+        }
+    }
+
+    function formatNumberWithCommas(numberString) {
+        const number = parseFloat(numberString);
+
+        if (isNaN(number)) {
+            return "Invalid number";
+        }
+
+        const formattedNumber = number.toLocaleString('en-US');
+        return formattedNumber;
+    }
+
+    // Gọi hàm để chuyển đổi các thành phần có lớp "price"
+    formatPriceElements();
 </script>
 </body>
 </html>

@@ -17,7 +17,6 @@ import javax.servlet.http.HttpSession;
 import dao.client.AuthDAO;
 import entity.Account;
 import entity.RSA;
-import jdk.jpackage.internal.Log;
 import util.SendEmail;
 import util.VerifyRecaptchas;
 
@@ -59,7 +58,6 @@ public class SubmitEmail extends HttpServlet {
 			SendEmail.sendMailKey(email, publicKey, rsa.exportPrivateKey());
 			AuthDAO.signUp(customer.getAccountName(), customer.getPassword(), customer.getFullName(), customer.getEmail(),
 					customer.getAddress(), customer.getPhone(), publicKey);
-
 			request.getRequestDispatcher("/client/Login.jsp").forward(request, response);
 		}
 

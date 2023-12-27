@@ -173,21 +173,16 @@
                                         <table class="total-line-table">
                                             <tbody class="total-line-table__tbody">
 
-
+                                            <tr class="total-line total-line--shipping-fee">
+                                                <th class="total-line__name">Phí vận chuyển</th>
+                                                <td class="total-line__price">
+                                                    40.000₫
+                                                </td>
+                                            </tr>
                                             <tr class="total-line total-line--subtotal">
                                                 <th class="total-line__name">Tạm tính</th>
                                                 <td class="total-line__price priceSystas">${requestScope.bill.totalPrice}₫</td>
                                             </tr>
-
-                                            <tr class="total-line total-line--shipping-fee">
-                                                <th class="total-line__name">Phí vận chuyển</th>
-                                                <td class="total-line__price">
-
-                                                    40.000₫
-
-                                                </td>
-                                            </tr>
-
                                             </tbody>
                                         </table>
                                     </div>
@@ -196,16 +191,16 @@
                                             <tbody class="total-line-table__tbody">
                                             <tr class="total-line payment-due">
                                                 <th class="total-line__name">
-                                                    <span class="payment-due__label-total priceSystas">Tổng cộng</span>
+                                                    <span class="payment-due__label-total">Tổng cộng</span>
                                                 </th>
                                                 <td class="total-line__price">
-                                                    <span class="payment-due__price">${requestScope.bill.totalPrice}₫</span>
+                                                    <span class="payment-due__price priceSystas">${requestScope.bill.totalPrice}₫</span>
                                                 </td>
                                             </tr>
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
+                                    </div>
                             </aside>
                         </div>
                         <div class="col col--primary">
