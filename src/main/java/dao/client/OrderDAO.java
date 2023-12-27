@@ -113,10 +113,10 @@ public class OrderDAO {
         return me.withHandle(handle -> handle.createQuery(query).bind(0, idOrder).mapTo(String.class).findOne().orElse(null));
     }
 
-    public static PublicKeyUser getPublicKeyById(int id) {
+    public static List<PublicKeyUser> getPublicKeyById(int id, String createAt) {
         Jdbi me = DBContext.me();
-        String query = "SELECT publicKey,expired,createAt FROM public_key_signature where id = ?";
-        PublicKeyUser publicKeyUser = me.withHandle(handle -> handle.createQuery(query).bind(0, id).mapToBean(PublicKeyUser.class).one());
+        String query = "SELECT publicKey,expired,createAt FROM public_key_signature where idAccount = ? AND ((createAt < ? AND ? < expired) OR (expired IS NULL)) ";
+        List<PublicKeyUser>  publicKeyUser = me.withHandle(handle -> handle.createQuery(query).bind(0, id).bind(1, createAt).bind(2, createAt).mapToBean(PublicKeyUser.class).list());
         return publicKeyUser;
     }
 public static String getCreateAtOrder(int id) {

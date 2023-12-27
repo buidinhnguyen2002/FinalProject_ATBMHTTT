@@ -19,6 +19,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 
 @WebServlet("/cart/SignatureController")
 public class SignatureController extends HttpServlet {
@@ -29,32 +30,30 @@ public class SignatureController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         HttpSession session = req.getSession();
         Account account = (Account) session.getAttribute("acc");
         int idAccount = account.getId();
         String id = req.getParameter("id");
         Order order = OrderDAO.getOrderByBid(id);
         order.setAccount(account);
-//        PublicKeyUser publicKeyUser = OrderDAO.getPublicKeyById(order.getPublicKeyId());
-        PublicKeyUser publicKeyUser = OrderDAO.getPublicKeyById(1);
+        List<PublicKeyUser> publicKeyUsers = OrderDAO.getPublicKeyById(order.getIdAccount(), order.getCreateAt());
         order.setOrderDetails(OrderDAO.getOrderDetailByBid(id));
         String signature = OrderDAO.getSignatureById(Integer.parseInt(id));
         String data = order.orderInfo();
-        System.out.println("Key: "+publicKeyUser.getPublicKey());
-        System.out.println("Data: "+data);
         boolean result = false;
-        try {
-            result = ElectronicSignature.checkSignature(publicKeyUser.getPublicKey(), data, signature);
-//            result = ElectronicSignature.checkSignature("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxItJJw0yM2Ecc8lmf7F8DHGHN/vpPQIbgIkwX9zX3ZiThf7c0Xyj8QfjP50eD7gzyS500L/abZlKAz9+cWdo4T2UD2m9TCDEueHfF8j2yB9qDe4fu1LhdnYepeH0s28pyYSZJUuNxTJFoFsC7j4LCM7Zwzh2BmoWVxFRsK2H1W7II5ZqKmXgzNMZ+IjyoUxhF1tmUr0b/9gIQKxod+g63woq7WQ2ilfOA3Wp65+HpT782NCwoz82jlFrobwY3XfOL5/e3CzBoXguSg42R71WvSG0rjl/tParWrcUfo7x5Zhb6sX8SBtfdm+qdZH8sl5f1zWHm8QNhQRTF9QFKkhW4wIDAQAB", data, signature);
-        } catch (InvalidKeySpecException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidKeyException e) {
-            throw new RuntimeException(e);
-        } catch (SignatureException e) {
-            throw new RuntimeException(e);
+        for(PublicKeyUser publicKeyUser: publicKeyUsers){
+            try {
+                result = ElectronicSignature.checkSignature(publicKeyUser.getPublicKey(), data, signature);
+                if(result) break;
+            } catch (InvalidKeySpecException e) {
+                throw new RuntimeException(e);
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            } catch (InvalidKeyException e) {
+                throw new RuntimeException(e);
+            } catch (SignatureException e) {
+                throw new RuntimeException(e);
+            }
         }
         JsonObject jsonObject = new com.google.gson.JsonObject();
         jsonObject.addProperty("verify", result);
