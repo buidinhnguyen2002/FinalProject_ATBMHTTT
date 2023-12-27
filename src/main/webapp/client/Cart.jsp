@@ -253,7 +253,7 @@
                         // verifyElement.innerText = "Chữ ký hợp lệ";
                         verifyElement.innerHTML = '<i style="color: #0aa60f; font-size: 20px" class="bi bi-check-lg"></i>';
                     } else {
-                        verifyElement.innerHTML = '<i style="color: red; font-size: 20px" class="bi bi-x-lg"></i>';
+                        verifyElement.innerHTML = '<i style="color: red; font-size: 16px" class="bi bi-x-lg"></i>';
                     }
                 },
                 error: function (data) {

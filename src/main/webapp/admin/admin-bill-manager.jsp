@@ -13,6 +13,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <jsp:include page="./header/link-css.jsp" flush="true"/>
     <style>.button-container {
         display: flex;
@@ -79,6 +80,7 @@
                             <th>Tình trạng</th>
                             <th>Tác vụ</th>
                             <th>Xóa</th>
+                            <th>Xác thực</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -170,6 +172,10 @@
                                                 type="button" title="Sửa"><i
                                                 class="fa fa-edit"></i></button>
                                     </div>
+                                </td>
+                                <td class="text-center" style="display: flex; flex-direction: row; justify-content: center;align-items: center">
+                                    <button class="btn btn-success" style="border-radius: 10px; font-size: 12px;" onfocus="this.style.outline='none'" onclick="checkSignature(${o.id})">Verify</button>
+                                    <span id="verify-${o.id}"></span>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -568,6 +574,31 @@
     $("#show-emp").on("click", function () {
         $("#ModalUP").modal({backdrop: false, keyboard: false})
     });
+    function checkSignature(id){
+        $.ajax({
+            url: "${pageContext.request.contextPath}/cart/SignatureController",
+            type: "POST",
+            data: {
+                id: id,
+            },
+            success: function (data) {
+                let isVerify = JSON.parse(data).verify;
+                // Thay đổi
+                // let elementId = "verify";
+                let elementId = "verify-"+id;
+                let verifyElement = document.getElementById(elementId);
+                if (isVerify) {
+                    // verifyElement.innerText = "Chữ ký hợp lệ";
+                    verifyElement.innerHTML = '<i style="color: #0aa60f; font-size: 20px" class="bi bi-check-lg"></i>';
+                } else {
+                    verifyElement.innerHTML = '<i style="color: red; font-size: 16px" class="bi bi-x-lg"></i>';
+                }
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
 </script>
 <script>
     document.getElementById("admin-bill").classList.add("active");
