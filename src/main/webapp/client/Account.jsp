@@ -127,6 +127,30 @@ if (session.getAttribute("acc") == null) {
 
 								</li>
 								<li>
+									<button type="button" id="btn-change-report" class="btn-cart"
+											title="Báo cáo lộ key">
+										<span><fmt:message key="Report.key"
+														   bundle="${lang}"></fmt:message></span>
+									</button>
+
+									<div id="dialog-confirm" title="Báo cáo lộ Key" style="display:none;">
+										<p>Thông báo: Bạn có muốn tạo key mới không?</p>
+									</div>
+
+									<div id="dialog-confirm1" title="Báo cáo lộ Key" style="display:none;">
+										<p>Key đã được gửi vào email của bạn. Xin hãy check email!</p>
+									</div>
+
+									<div id="dialog-inputs" title="Nhập Key" style="display:none;">
+										<form action="/HadKeyControl" method="post">
+										<input type="text" name="input" id="input" placeholder="Public key" style="width: 500px; height: 30px;">
+										</form>
+									</div>
+
+
+								</li>
+
+								<li>
 									<button type="submit" id="btn-confirm1" style="display: none;"
 										class="btn-cart" title="Cập nhật">
 										<span><fmt:message key="update" bundle="${lang}"></fmt:message></span>
@@ -190,6 +214,13 @@ if (session.getAttribute("acc") == null) {
 	</div>
 	<!-- End Main Content -->
 	<jsp:include page="./footer/Footer.jsp"></jsp:include>
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<!-- jQuery UI -->
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 	<script type="text/javascript">
 		$("#btn-change-pass").click(function() {
 			$("#table-pass").css("display", "table");
@@ -386,5 +417,60 @@ if (session.getAttribute("acc") == null) {
                             });
                 });
 	</script>
+	<script>
+		$(document).ready(function() {
+			// Xử lý sự kiện click cho nút
+			$("#btn-change-report").click(function() {
+				// Hiển thị dialog
+				$("#dialog-confirm").dialog({
+					resizable: false,
+					height: "auto",
+					width: 400,
+					modal: true,
+					buttons: {
+						"Nhập key": function() {
+							$(this).dialog("close");
+							// Xử lý logic khi người dùng nhấn Xác nhận ở đây
+							// Ví dụ: chuyển hướng đến trang khác, gửi dữ liệu, v.v.
+							$("#dialog-inputs").dialog({
+								resizable: false,
+								height: "auto",
+								width: 550,
+								modal: true,
+								buttons: {
+									"OK": function() {
+										// Xử lý dữ liệu khi người dùng nhấn OK
+										var key1 = $("#input").val();
+
+										// Xử lý dữ liệu ở đây, ví dụ: gửi dữ liệu lên server
+
+										// Đóng dialog
+										$(this).dialog("close");
+									},
+									"Hủy": function() {
+										$(this).dialog("close");
+									}
+								}
+							});
+						},
+						"Tạo key": function() {
+							$(this).dialog("close");
+							$("#dialog-confirm").dialog({
+								resizable: false,
+								height: "auto",
+								width: 500,
+								modal: true,
+								buttons: {}
+							});
+						},
+						"Hủy": function() {
+							$(this).dialog("close");
+						}
+					}
+				});
+			});
+		});
+	</script>
+
 </body>
 </html>
