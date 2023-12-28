@@ -142,8 +142,9 @@ if (session.getAttribute("acc") == null) {
 									</div>
 
 									<div id="dialog-inputs" title="Nhập Key" style="display:none;">
-										<form action="/HadKeyControl" method="post">
-										<input type="text" name="input" id="input" placeholder="Public key" style="width: 500px; height: 30px;">
+										<form id="keyForm" action="${pageContext.request.contextPath}/auth/HadKeyControl" method="post">
+											<input type="text" name="input" id="input" placeholder="Public key" value="" style="width: 500px; height: 30px;">
+<%--											<p style="color: red;">${error}</p>--%>
 										</form>
 									</div>
 
@@ -430,6 +431,8 @@ if (session.getAttribute("acc") == null) {
 					buttons: {
 						"Nhập key": function() {
 							$(this).dialog("close");
+							let previousDialog = $("#dialog-confirm");
+							previousDialog.dialog("open");
 							// Xử lý logic khi người dùng nhấn Xác nhận ở đây
 							// Ví dụ: chuyển hướng đến trang khác, gửi dữ liệu, v.v.
 							$("#dialog-inputs").dialog({
@@ -439,28 +442,46 @@ if (session.getAttribute("acc") == null) {
 								modal: true,
 								buttons: {
 									"OK": function() {
-										// Xử lý dữ liệu khi người dùng nhấn OK
-										var key1 = $("#input").val();
+										// Lấy giá trị từ trường input
+										let inputValue = $("#input").val();
+										$.ajax({
+											url: "${pageContext.request.contextPath}/HadKeyControl",  // URL của servlet
+											type: "POST",
+											data: { input: inputValue },  // Truyền giá trị từ trường input
+											success: function(data) {
+												// Xử lý phản hồi từ servlet nếu cần
 
-										// Xử lý dữ liệu ở đây, ví dụ: gửi dữ liệu lên server
-
+												console.log("Dữ liệu đã được gửi đến servlet.");
+											},
+											error: function(data) {
+												console.log("Đã xảy ra lỗi khi gửi dữ liệu đến servlet.");
+											}
+										});
 										// Đóng dialog
 										$(this).dialog("close");
+										previousDialog.dialog("close");
 									},
 									"Hủy": function() {
 										$(this).dialog("close");
+										if ($("#dialog-confirm")) {
+											$("#dialog-confirm").dialog("open");
+										}
 									}
 								}
 							});
 						},
 						"Tạo key": function() {
 							$(this).dialog("close");
-							$("#dialog-confirm").dialog({
+							$("#dialog-confirm1").dialog({
 								resizable: false,
 								height: "auto",
 								width: 500,
 								modal: true,
-								buttons: {}
+								buttons: {
+									"OK": function() {
+										$(this).dialog("close");
+									}
+								}
 							});
 						},
 						"Hủy": function() {

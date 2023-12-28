@@ -1,16 +1,15 @@
 package controller.client.auth;
 
-import dao.client.AccessDAO;
 import dao.client.AuthDAO;
 import entity.Account;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 @WebServlet("/HadKeyControl")
 public class HadKeyControl extends HttpServlet {
@@ -20,15 +19,25 @@ public class HadKeyControl extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
-        Account customer = (Account) session.getAttribute("custemp");
+        Account customer = (Account) session.getAttribute("acc");
 
         String inputKey = request.getParameter("input");
 
-        boolean authDAO;
-        if (AuthDAO.updateExpiredPublicKey(customer.getId())){
-            authDAO = AuthDAO.insertNewPublicKey(customer.getId(), inputKey);
-            request.setAttribute("success", "Cập nhật key thành công!");
+        boolean authDAO = false;
+
+        System.out.println(inputKey.length());
+
+        if (inputKey.length() == 2048 && !AuthDAO.selectSamePublicKey(inputKey)) {
+            AuthDAO.updateExpiredPublicKey(customer.getId());
+            AuthDAO.insertNewPublicKey(customer.getId(), inputKey);
+        } else {
+//            request.setAttribute("error", "Public key không đúng. Vui lòng nhập lại!");
         }
-        else authDAO = false;
+
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doPost(request, response);
     }
 }

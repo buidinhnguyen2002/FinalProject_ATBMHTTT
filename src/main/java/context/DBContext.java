@@ -1,10 +1,11 @@
 package context;
 
-import java.sql.*;
-import org.jdbi.v3.core.Jdbi;
 import com.zaxxer.hikari.HikariDataSource;
+import org.jdbi.v3.core.Jdbi;
 
-//import entity.Product;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 
 public class DBContext {
 	private static final String serverName = "localhost";
