@@ -8,12 +8,12 @@ import java.sql.SQLException;
 
 
 public class DBContext {
-	private static final String serverName = "34.143.132.36";
+	private static final String serverName = "localhost";
 	private static final String dbName = "haloshop";
 	private static final String portNumber = "3306";
 	private static final String instance = "";
 	private static final String userID = "root";
-	private static final String password = "haloshop123";
+	private static final String password = "123456";
 	private static final HikariDataSource dataSource;
 	static Jdbi jdbi;
 
