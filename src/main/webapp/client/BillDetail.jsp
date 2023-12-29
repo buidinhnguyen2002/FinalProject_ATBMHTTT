@@ -261,12 +261,12 @@
                                            id="cancelLink"
                                            style="background-color: red; margin-right: 10px" class="btn btn--large">Hủy đơn hàng</a>
                                     </c:if>
-                                    <c:if test="${bill.statusPay == 'Đã thanh toán'&& check==false&&!bill.status=='Hoàn thành'}">
+                                    <c:if test="${bill.statusPay == 'Đã thanh toán'&& check==false&&bill.status!='Hoàn thành'}">
                                         <a href="${pageContext.request.contextPath}/cart/CancelBill?id=${bill.id}&status=Payed"
                                            id="cancelLink"
                                            style="background-color: yellow; margin-right: 10px" class="btn btn--large">Yêu cầu hoàn tiền</a>
                                     </c:if>
-                                    <c:if test="${check==false &&!bill.status=='Hoàn thành'}">
+                                    <c:if test="${check==false && bill.status!='Hoàn thành'}">
                                         <script>
                                             // Lấy giá trị của biến check từ server-side hoặc một nguồn dữ liệu khác
                                             var checkValue = ${check};

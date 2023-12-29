@@ -722,14 +722,14 @@
                     serviceFee = 40000; // Giá trị mặc định
                 }
                 <%--let total = ${total};--%>
-                let total = parseFloat($('#provisional').text().replace('$', ''));
+                let total = ${total};
                 total += serviceFee;
                 document.getElementById("feeShipId").innerHTML = ` <td id="feeShipId" class="total-line__price">   ` + serviceFee + `
                                         <input type="hidden" name="shipFee" value="` + serviceFee + `"/></td>`;
-                document.getElementById("spanShipId").innerHTML = ` <span id="spanShipId"  class="content-box__emphasis price">
+                document.getElementById("spanShipId").innerHTML = ` <span id="spanShipId"  class="content-box__emphasis price priceSystas">
                                                                  ` + serviceFee + `
                                                             </span>`;
-                document.getElementById("totalId").innerHTML = ` <span id="totalId" class="payment-due__price">` + total + `</span> `;
+                document.getElementById("totalId").innerHTML = ` <span id="totalId" class="payment-due__price priceSystas">` + total + `</span> `;
                 document.getElementById("submitBtn").disabled = false; // Enable the submit button
             },
             error: function (data) {
