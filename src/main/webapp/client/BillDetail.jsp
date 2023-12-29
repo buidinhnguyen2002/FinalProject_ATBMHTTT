@@ -255,59 +255,36 @@
                                             id="cancelLink"
                                             style="background-color: red; margin-right: 10px" class="btn btn--large">Hủy
                                         đơn hàng</a>
-                                        <script>
-                                            document.getElementById("cancelLink").onclick = function () {
-                                                Swal.fire({
-                                                    title: 'Bạn có chắc chắn muốn hủy đơn hàng?',
-                                                    icon: 'warning',
-                                                    showCancelButton: true,
-                                                    confirmButtonText: 'Yes',
-                                                    cancelButtonText: 'No'
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        Swal.fire(
-                                                            'Đơn hàng của bạn đã được hủy','',
-                                                            'success'
-                                                        ).then(() => {
-                                                            // Perform the cancellation logic or redirect if needed
-                                                            window.location.href = this.href;
-                                                        });
-                                                    }
-                                                });
-                                                return false;
-                                            };
-                                        </script>
                                     </c:if>
-                                    <!-- Your existing code -->
                                     <c:if test="${bill.status == 'Đang xử lý' && bill.statusPay == 'Đã thanh toán'}">
                                         <a href="${pageContext.request.contextPath}/cart/CancelBill?id=${bill.id}&status=Payed"
                                            id="cancelLink"
                                            style="background-color: red; margin-right: 10px" class="btn btn--large">Hủy đơn hàng</a>
+                                    </c:if>
+                                    <c:if test="${bill.statusPay == 'Đã thanh toán'&& check==false&&bill.status!='Hoàn thành'}">
+                                        <a href="${pageContext.request.contextPath}/cart/CancelBill?id=${bill.id}&status=Payed"
+                                           id="cancelLink"
+                                           style="background-color: yellow; margin-right: 10px" class="btn btn--large">Yêu cầu hoàn tiền</a>
+                                    </c:if>
+                                    <c:if test="${check==false && bill.status!='Hoàn thành'}">
                                         <script>
-                                            document.getElementById("cancelLink").onclick = function () {
-                                                Swal.fire({
-                                                    title: 'Bạn có chắc chắn muốn hủy đơn hàng?',
-                                                    icon: 'warning',
-                                                    showCancelButton: true,
-                                                    confirmButtonText: 'Yes',
-                                                    cancelButtonText: 'No'
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        Swal.fire(
-                                                            'Đơn hàng của bạn đã được thanh toán trước đó',
-                                                            'Chúng tôi sẽ tiến hành hoàn tiền trong vòng 24h',
-                                                            'success'
-                                                        ).then(() => {
-                                                            // Perform the cancellation logic or redirect if needed
-                                                            window.location.href = this.href;
-                                                        });
-                                                    }
-                                                });
-                                                return false;
-                                            };
+                                            // Lấy giá trị của biến check từ server-side hoặc một nguồn dữ liệu khác
+                                            var checkValue = ${check};
+                                            // Kiểm tra điều kiện và hiển thị dialog nếu cần thiết
+                                            if (checkValue === false) {
+                                                // Hàm hiển thị dialog
+                                                function showConfirmationDialog() {
+                                                    Swal.fire({
+                                                        title: 'Đơn hàng đã bị thay đổi !',
+                                                        icon: 'error',
+                                                        confirmButtonText: 'Yes',
+                                                    });
+                                                }
+                                                // Gọi hàm hiển thị dialog ngay khi trang web được tải
+                                                showConfirmationDialog();
+                                            }
                                         </script>
                                     </c:if>
-
                                     <a href="${pageContext.request.contextPath}/IndexControl" class="btn btn--large">Tiếp
                                         tục mua hàng</a>
                                     <span class="text-icon-group text-icon-group--large icon-print"
@@ -323,6 +300,29 @@
             </main>
         </div>
     </form>
+    <script>
+        document.getElementById("cancelLink").onclick = function () {
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn hủy đơn hàng?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Đơn hàng của bạn đã được thanh toán trước đó',
+                        'Chúng tôi sẽ tiến hành hoàn tiền trong vòng 24h',
+                        'success'
+                    ).then(() => {
+                        // Perform the cancellation logic or redirect if needed
+                        window.location.href = this.href;
+                    });
+                }
+            });
+            return false;
+        };
+    </script>
     <script>
         function formatPriceElements() {
             const priceElements = document.getElementsByClassName('priceSystas');

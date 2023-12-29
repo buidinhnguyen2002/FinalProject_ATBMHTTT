@@ -125,15 +125,12 @@ public class SendEmail {
 			msg.setSubject("HaLo's Shop");
 			msg.setSentDate(new Date());
 			// Nội dung
-
-//			msg.setText("Public key: " + publicKey + "\nPrivate key: " + privateKey, "UTF-8");
 			MimeBodyPart contentPart = new MimeBodyPart();
 			contentPart.setContent("<p><strong>Public key:</strong> " + publicKey + "</p><p><strong>Private key:</strong> " + privateKey + "</p>", "text/html; charset=UTF-8");
 
 			MimeBodyPart attachmentPart = new MimeBodyPart();
 			AES aes = new AES();
 			aes.encryptAESFile("keys.txt", "private_key.txt", "");
-//			attachmentPart.attachFile(new File("keys.txt"));
 			attachmentPart.attachFile(new File("private_key.txt"));
 
 			Multipart multipart = new MimeMultipart();

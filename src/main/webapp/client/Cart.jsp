@@ -127,8 +127,7 @@
                                 <td id="totalAmount" class="text-right priceSystas">${total}</td>
                             </tr>
                         </table>
-                        <c:url var="order" value="cart/OrderBillControl"></c:url>
-                        <a href="${pageContext.request.contextPath}/${order}?total=${total}"
+                        <a href="${pageContext.request.contextPath}/cart/OrderBillControl?total=${total}"
                            class="btn-cart pull-right"><fmt:message
                                 key="pay" bundle="${lang}"></fmt:message></a>
                     </div>
@@ -196,6 +195,9 @@
                                             </c:if>
                                             <c:if test="${o.status=='Đã hủy'}">
                                                 <span class="badge bg-danger" style="background-color: red">${o.status}</span>
+                                            </c:if>
+                                            <c:if test="${o.status=='Yêu cầu hoàn tiền'}">
+                                                <span class="badge bg-warning" style="background-color: yellow">${o.status}</span>
                                             </c:if>
                                             <c:if test="${o.status=='Hoàn thành'}">
                                                 <span class="badge bg-success" style="background-color: #0aa60f">${o.status}</span>

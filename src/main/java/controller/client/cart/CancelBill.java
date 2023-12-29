@@ -20,19 +20,22 @@ public class CancelBill extends HttpServlet {
                OrderDAO.updateStatusOrder("Đã hủy",id);
            }else if(status.equals("Payed")){
                Order order =  OrderDAO.getOrderByBid(id);
-               Boolean checkRefund =PayPalRefund.refundPayPal(order.getTransactionId());
-               if (checkRefund){
-                   OrderDAO.updateStatusPayOrder("Đã hoàn tiền",id);
-                   System.out.println("Hoàn Tiền thành công");
+               if (order.getStatus().equals("Đang xử lý")){
+                   Boolean checkRefund =PayPalRefund.refundPayPal(order.getTransactionId());
+                   if (checkRefund){
+                       OrderDAO.updateStatusPayOrder("Đã hoàn tiền",id);
+                       System.out.println("Hoàn Tiền thành công");
+                   }else {
+                       System.out.println("Không thể hoàn tiền");
+                   }
+                   OrderDAO.updateStatusOrder("Đã hủy",id);
                }else {
-                   System.out.println("Không thể hoàn tiền");
+                   OrderDAO.updateStatusOrder("Yêu cầu hoàn tiền",id);
                }
-               OrderDAO.updateStatusOrder("Đã hủy",id);
-
            }
            request.getRequestDispatcher("CartControl").forward(request, response);
        }catch (Exception e){
-
+           e.printStackTrace();
        }
     }
 
