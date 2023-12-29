@@ -23,6 +23,7 @@ import entity.Order;
 import entity.OrderDetail;
 import util.API;
 import bean.Log;
+import util.PayPalRefund;
 
 @WebServlet("/admin-bill/BillManagerController")
 public class BillManagerController extends HttpServlet {
@@ -46,6 +47,7 @@ public class BillManagerController extends HttpServlet {
             isSuc =  BillAdminDAO.updateBill("Đang vận chuyển", id);
             Order od = BillAdminDAO.getOrderById(id);
             API.registerTransport("1540", "440505", od.getDistrictId(), od.getWardId(), "20", "20", "20", "100");
+            BillAdminDAO.updateBillDeliveryAt(id);
             log.setSrc(namelog + " UPDATE ");
             log.setContent("UPDATE BILL SUCCESS BY USER: "+ account.getAccountName());
             log.setUserId(account.getId());
@@ -56,8 +58,16 @@ public class BillManagerController extends HttpServlet {
             log.setContent("UPDATE BILL SUCCESS BY USER: "+ account.getAccountName());
             log.setUserId(account.getId());
         }
-        if (type.equals("back")) {
-            isSuc = BillAdminDAO.updateBill("Đã xác nhận", id);
+        if (type.equals("refund")) {
+            isSuc = BillAdminDAO.updateBill("Đã hủy", id);
+            Order order =  OrderDAO.getOrderByBid(id);
+            Boolean checkRefund = PayPalRefund.refundPayPal(order.getTransactionId());
+            if (checkRefund){
+                OrderDAO.updateStatusPayOrder("Đã hoàn tiền",id);
+                System.out.println("Hoàn Tiền thành công");
+            }else {
+                System.out.println("Không thể hoàn tiền");
+            }
             log.setSrc(namelog + " UPDATE ");
             log.setContent("UPDATE BILL SUCCESS BY USER: "+ account.getAccountName());
             log.setUserId(account.getId());

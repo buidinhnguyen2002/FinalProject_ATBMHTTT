@@ -116,6 +116,9 @@
                                 <c:if test="${o.statusPay=='Chưa thanh toán'}">
                                     <td style="color: red">${o.statusPay}</td>
                                 </c:if>
+                                <c:if test="${o.statusPay=='Đã hoàn tiền'}">
+                                    <td style="color: yellow">${o.statusPay}</td>
+                                </c:if>
                                 <td>
                                     <c:if test="${o.status=='Đang xử lý'}">
                                         <span class="badge bg-warning">${o.status}</span>
@@ -131,6 +134,9 @@
                                     </c:if>
                                     <c:if test="${o.status=='Hoàn thành'}">
                                         <span class="badge bg-success">${o.status}</span>
+                                    </c:if>
+                                    <c:if test="${o.status=='Yêu cầu hoàn tiền'}">
+                                        <span class="badge bg-warning">${o.status}</span>
                                     </c:if>
                                 </td>
                                 <td>
@@ -155,6 +161,12 @@
                                             <button class="btn btn-primary btn-sm cancel" type="button"
                                                     onclick="deny(${o.id},this)"
                                                     title="Hủy đơn hàng"><i class="fas fa-times"></i></button>
+                                        </c:if>
+                                        <c:if test="${o.status=='Yêu cầu hoàn tiền'}">
+                                            <button class="btn btn-primary btn-sm cancel" type="button"
+                                                    onclick="refund(${o.id},this)"
+                                                    title="Hoàn tiền đơn hàng"><i class="fa fa-repeat"></i>
+                                            </button>
                                         </c:if>
                                     </div>
                                 </td>
@@ -359,6 +371,7 @@
                         let isSuc = JSON.parse(data).isSuc;
                         if (isSuc) {
                             $(tdArray[9]).html('<span class="badge bg-danger"">Đã hủy</span>');
+                            $(parent).html('');
                         }
                         Swal.fire('Hủy đơn hàng thành công', '', 'success');
                     },
@@ -375,7 +388,46 @@
             }
         })
     }
+    function refund(orderId, button) {
+        let tr = $(button).closest("tr");
+        let tdArray = $(tr).find("td");
+        let parent = $(button).closest(".button-container");
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn hoàn tiền cho đơn hàng này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "${pageContext.request.contextPath}/admin-bill/BillManagerController",
+                    type: "post",
+                    data: {
+                        orderId: orderId,
+                        type: 'refund'
+                    },
+                    success: function (data) {
+                        let isSuc = JSON.parse(data).isSuc;
+                        if (isSuc) {
+                            $(tdArray[9]).html('<span class="badge bg-danger"">Đã hủy</span>');
+                            $(parent).html('');
+                        }
+                        Swal.fire('Hoàn tiền thành công', '', 'success');
+                    },
+                    error: function (data) {
+                        console.log(data)
+                    }
+                });
 
+
+            } else if (result.isDenied) {
+                // Nếu người dùng chọn "No"
+                // Hiển thị thông báo không xóa user bằng SweetAlert2
+                Swal.fire('Không khôi phục đơn hàng', '', 'info');
+            }
+        })
+    }
     function success(orderId, button) {
         let tr = $(button).closest("tr");
         let tdArray = $(tr).find("td");
