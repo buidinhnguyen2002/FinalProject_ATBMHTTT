@@ -1,10 +1,11 @@
 package context;
 
-import java.sql.*;
-import org.jdbi.v3.core.Jdbi;
 import com.zaxxer.hikari.HikariDataSource;
+import org.jdbi.v3.core.Jdbi;
 
-//import entity.Product;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 
 public class DBContext {
 	private static final String serverName = "localhost";
@@ -12,7 +13,7 @@ public class DBContext {
 	private static final String portNumber = "3306";
 	private static final String instance = "";
 	private static final String userID = "root";
-	private static final String password = "";
+	private static final String password = "thuyhao1506";
 	private static final HikariDataSource dataSource;
 	static Jdbi jdbi;
 

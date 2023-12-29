@@ -1,8 +1,9 @@
 package entity;
-import javax.crypto.*;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.*;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
@@ -11,6 +12,10 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 public class RSA {
+    public RSA() {
+
+    }
+
     public static enum Mode {
         ENCRYPT,
         DECRYPT
@@ -105,5 +110,9 @@ public class RSA {
 //        String encrypt = rsa.encryptText(plainText);
 //        System.out.println(encrypt);
 //        System.out.println(rsa.decryptText(encrypt, privateKey));
+        RSA as = new RSA();
+        as.genKey(2048);
+        System.out.println(as.publicKey);
+
     }
 }
