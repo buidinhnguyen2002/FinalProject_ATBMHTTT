@@ -1,5 +1,7 @@
 package entity;
 
+import dao.client.OrderDAO;
+
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -37,20 +39,44 @@ public class ElectronicSignature {
         signature.update(data.getBytes());
         return signature.verify(signatureDecrypt);
     }
-    public static boolean isPrivateKey(String key) {
+    public static boolean isPrivateKey(String key, int idAccount) throws NoSuchAlgorithmException {
+        String data = "abc";
+        PublicKeyUser publicKey = OrderDAO.getPublicKeyById(idAccount);
+        String digitalSignature = null;
         try {
             byte[] keyBytes = Base64.getDecoder().decode(key);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             try {
                 PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(keyBytes);
                 keyFactory.generatePrivate(privateKeySpec);
-                return true;
             } catch (InvalidKeySpecException e) {
                 return false;
             }
         } catch (NoSuchAlgorithmException | IllegalArgumentException e) {
             return false;
         }
+        try {
+            digitalSignature = doSignature(key, data);
+        } catch (InvalidKeySpecException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
+        } catch (SignatureException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            if(!checkSignature(publicKey.getPublicKey(), data, digitalSignature)){
+                System.out.println("Do đây");
+                return false;
+            }
+        } catch (InvalidKeySpecException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
+        } catch (SignatureException e) {
+            throw new RuntimeException(e);
+        }
+        return true;
     }
 
     public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, SignatureException, InvalidKeyException {
