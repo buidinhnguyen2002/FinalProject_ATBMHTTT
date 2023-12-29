@@ -602,12 +602,13 @@
             getPrivateKeyFromFile(base64String)
                 .then(result => {
                     console.log("Kết quả từ server:", result);
-                    file.value = '';
+                    // file.value = '';
                 })
                 .catch(error => {
                     console.error("Lỗi khi gửi yêu cầu:", error);
-                    file.value = '';
+                    // file.value = '';
                 });
+            document.getElementById('file').value = '';
         }
         fileReader.readAsDataURL(file);
     });
@@ -626,6 +627,7 @@
                     if (privateKey) {
                         privateKeyInput.value = privateKey;
                         element.innerText = '';
+                        privateKeyInput.focus()
                         resolve(true);
                     } else {
                         element.innerText = 'Private key không hợp lệ. Vui lòng kiểm tra lại!';
