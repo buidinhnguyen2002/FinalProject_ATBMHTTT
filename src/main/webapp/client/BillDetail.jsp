@@ -252,9 +252,31 @@
                                 <div class="field__input-btn-wrapper field__input-btn-wrapper--floating">
                                     <c:if test="${bill.status=='Đang xử lý'&& bill.statusPay !='Đã thanh toán'}"> <a
                                             href="${pageContext.request.contextPath}/cart/CancelBill?id=${bill.id}&status=UnPay"
-                                            id="cancelLink"
+                                            id="cancelLinkUnPay"
                                             style="background-color: red; margin-right: 10px" class="btn btn--large">Hủy
                                         đơn hàng</a>
+                                        <script>
+                                            document.getElementById("cancelLinkUnPay").onclick = function () {
+                                                Swal.fire({
+                                                    title: 'Bạn có chắc chắn muốn hủy đơn hàng?',
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonText: 'Yes',
+                                                    cancelButtonText: 'No'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        Swal.fire(
+                                                            'Đơn hàng của bạn đã được hủy','',
+                                                            'success'
+                                                        ).then(() => {
+                                                            // Perform the cancellation logic or redirect if needed
+                                                            window.location.href = this.href;
+                                                        });
+                                                    }
+                                                });
+                                                return false;
+                                            };
+                                        </script>
                                     </c:if>
                                     <c:if test="${bill.status == 'Đang xử lý' && bill.statusPay == 'Đã thanh toán'}">
                                         <a href="${pageContext.request.contextPath}/cart/CancelBill?id=${bill.id}&status=Payed"
