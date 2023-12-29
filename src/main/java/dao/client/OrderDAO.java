@@ -119,6 +119,12 @@ public class OrderDAO {
         List<PublicKeyUser>  publicKeyUser = me.withHandle(handle -> handle.createQuery(query).bind(0, id).bind(1, createAt).bind(2, createAt).mapToBean(PublicKeyUser.class).list());
         return publicKeyUser;
     }
+    public static PublicKeyUser getPublicKeyById(int id) {
+        Jdbi me = DBContext.me();
+        String query = "SELECT publicKey,expired,createAt FROM public_key_signature where idAccount = ? AND expired IS NULL ";
+        PublicKeyUser  publicKeyUser = me.withHandle(handle -> handle.createQuery(query).bind(0, id).mapToBean(PublicKeyUser.class).one());
+        return publicKeyUser;
+    }
 public static String getCreateAtOrder(int id) {
     Jdbi me = DBContext.me();
     String query = "select createAt from orders where id = ?";
