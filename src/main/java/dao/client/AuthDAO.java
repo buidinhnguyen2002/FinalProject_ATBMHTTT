@@ -8,10 +8,6 @@ import entity.Role;
 import org.jdbi.v3.core.Jdbi;
 import util.EnCode;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -356,8 +352,51 @@ public class AuthDAO {
         return account;
     }
 
+    //update Expired key
+    public static boolean updateExpiredPublicKey(int id) {
+        Jdbi me = DBContext.me();
+        String query = "update public_key_signature set expired = now() where idAccount = ? ORDER BY createAt DESC LIMIT 1";
+        return me.withHandle(handle -> handle.createUpdate(query).bind(0, id).execute() == 1);
+    }
+
+    //insert new key
+    public static boolean insertNewPublicKey(int id, String publicKey) {
+        String insert = "INSERT INTO public_key_signature (idAccount, publicKey) VALUES (?, ?)";
+        Jdbi me = DBContext.me();
+
+        me.useHandle(handle -> {
+            try {
+                handle.begin();
+                handle.createUpdate(insert)
+                        .bind(0, id)
+                        .bind(1, publicKey)
+                        .execute();
+                handle.commit();
+            } catch (Exception e) {
+                handle.rollback();
+                e.printStackTrace();
+            }
+        });
+        return false;
+    }
+
+    //check key which is same
+    public static boolean selectSamePublicKey(String publicKey) {
+        Jdbi jdbi  = DBContext.me();
+        String query = "select Count(publicKey) from public_key_signature where publicKey = ?";
+        Integer count = jdbi.withHandle(handle ->
+                handle.createQuery(query)
+                        .bind(0, publicKey)
+                        .mapTo(Integer.class) // Map kết quả thành Integer
+                        .one() // Đảm bảo kết quả chỉ có một hàng
+        );
+        // Trả về true nếu count > 0, tức là publicKey đã tồn tại; ngược lại trả về false
+        return count != null && count > 0;
+    }
+
     public static void main(String[] args) {
-        System.out.println(login("leminhlong@gmail.com","L0374781483Lll@","null"));
+//        System.out.println(login("leminhlong@gmail.com","L0374781483Lll@","null"));
+        System.out.println(updateExpiredPublicKey(35));
     }
 
 }
