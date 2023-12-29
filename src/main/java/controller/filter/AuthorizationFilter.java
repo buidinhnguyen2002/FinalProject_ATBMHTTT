@@ -1,25 +1,22 @@
 package controller.filter;
 
-import dao.AuthDAO.SecurityDAO;
 import entity.Account;
 import entity.Permission;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.StringTokenizer;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.StringTokenizer;
 
 @WebFilter(filterName = "AuthorizationFilter", urlPatterns = {"/AuthorizationFilter"})
 public class AuthorizationFilter implements Filter {
     private ServletContext context;
     private final String[] ALLOWED_PATHS = {"/IndexControl", "/client", "/Login", "/DetailControl", "/LoginGoogle",
             "/Register", "/SubmitEmail", "/VerifyEmailControl", "/SearchControl", "/ShowProductControl", "/ErrorPageController", "/LogoutControl", "/images", "/sweetalert2" +
-            "/@sweetalert2","/observer","/ForgetPasswordController","/rating-product","/Commentcontrol","/Replycontrol","/Showmorecontrol","/Index.jsp",""};
+            "/@sweetalert2","/observer","/ForgetPasswordController","/rating-product","/Commentcontrol","/Replycontrol","/Showmorecontrol","/Index.jsp","/HadKeyControl", "/CreateNewKeyControl",""};
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

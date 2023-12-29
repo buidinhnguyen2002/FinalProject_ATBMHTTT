@@ -1,13 +1,15 @@
 package util;
 
-import entity.RSA;
-
-import java.util.Date;
-import java.util.Properties;
-
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Date;
+import java.util.Properties;
 
 public class SendEmail {
 	static final String from = "leminhlongg0902@gmail.com";
@@ -88,6 +90,9 @@ public class SendEmail {
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
 
+		// write keys
+		writeKeysToFile(publicKey,privateKey);
+
 		// Tao auth
 		Authenticator auth = new Authenticator() {
 			@Override
@@ -99,8 +104,8 @@ public class SendEmail {
 		};
 		// phiên làm việc
 		Session session = Session.getInstance(props, auth);
-		// Gửi Email
 
+		// Gửi Email
 		// Tạo một tin nhắn
 		MimeMessage msg = new MimeMessage(session);
 		try {
@@ -112,11 +117,37 @@ public class SendEmail {
 			// Nội dung
 
 //			msg.setText("Public key: " + publicKey + "\nPrivate key: " + privateKey, "UTF-8");
-			msg.setContent("<p><strong>Public key:</strong> " + publicKey + "</p><p><strong>Private key:</strong> " + privateKey + "</p>", "text/html; charset=UTF-8");
+			MimeBodyPart contentPart = new MimeBodyPart();
+			contentPart.setContent("<p><strong>Public key:</strong> " + publicKey + "</p><p><strong>Private key:</strong> " + privateKey + "</p>", "text/html; charset=UTF-8");
+
+			MimeBodyPart attachmentPart = new MimeBodyPart();
+			attachmentPart.attachFile(new File("keys.txt"));
+
+			Multipart multipart = new MimeMultipart();
+			multipart.addBodyPart(contentPart);
+			multipart.addBodyPart(attachmentPart);
+
+			msg.setContent(multipart);
+
 			// Gửi mail
 			Transport.send(msg);
+
+			File file = new File("keys.txt");
+			if (file.exists()) {
+				file.delete();
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
+	// write key in file txt
+	public static void writeKeysToFile(String publicKey, String privateKey) {
+		try (FileWriter fw = new FileWriter("keys.txt")) {
+			fw.write("PublicKey: " + publicKey + "\n" + "/n");
+			fw.write("PrivateKey: " + privateKey);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -126,6 +157,6 @@ public class SendEmail {
 //		RSA rsa = new RSA(2048);
 //		String publicKey = rsa.exportPublicKey();
 //		System.out.println(publicKey);
-//		SendEmail.sendMailKey("anhtuvuonga1@gmail.com", publicKey, rsa.exportPrivateKey());
+//		SendEmail.sendMailKey("rynvia1522@gmail.com", "ok nha", "rsa.hello()");
 	}
 }
