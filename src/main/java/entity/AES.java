@@ -12,20 +12,24 @@ public class AES {
     public static String[] modes = {"ECB", "CBC", "CFB", "OFB"};
     private String modeAlgorithm;
     private String defaultKey;
-    public AES(int keySize) throws NoSuchAlgorithmException {
+
+    public AES() throws UnsupportedEncodingException {
         defaultKey = "TnG/nz0PfGOp9izSf0ycNEf7z1iaLTh/2uPrslj8GDg=";
+//        SecretKeySpec secretKeySpec = new SecretKeySpec(defaultKey.getBytes("UTF-8"), "AES");
+        SecretKeySpec secretKeySpec = new SecretKeySpec(Base64.getDecoder().decode(defaultKey), "AES");
+        this.key = secretKeySpec;
         modeAlgorithm = "ECB";
 //        key = creteKey(keySize);
     }
 
-    public AES( String key, String modeAlgorithm) throws UnsupportedEncodingException {
+    public AES(String key, String modeAlgorithm) throws UnsupportedEncodingException {
         SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
         this.key = secretKeySpec;
         this.modeAlgorithm = modeAlgorithm;
     }
-    public AES() {
-    }
+
     public static String[] keySizes = {"128", "192", "256"};
+
     public SecretKey creteKey(int keySize) throws NoSuchAlgorithmException {
         KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
         keyGenerator.init(keySize);
@@ -34,35 +38,36 @@ public class AES {
         return key;
     }
 
-    public String encryptAES(String plaintext, String key) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding", "BC");
+    //    public String encryptAES(String plaintext, String key) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+//        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding", "BC");
+//        byte[] plaintextBytes = plaintext.getBytes("UTF-8");
+//        SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+//        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+//        byte[] cipherText = cipher.doFinal(plaintextBytes);
+//        return Base64.getEncoder().encodeToString(cipherText);
+//    }
+    public String encryptAES(String plaintext, String iv) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+        Cipher cipher = Cipher.getInstance("AES");
         byte[] plaintextBytes = plaintext.getBytes("UTF-8");
-        SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
-        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
-        byte[] cipherText = cipher.doFinal(plaintextBytes);
-        return Base64.getEncoder().encodeToString(cipherText);
-    }
-    public String encryptAES(String plaintext, String key, String iv) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
-        Cipher cipher = Cipher.getInstance("AES/"+modeAlgorithm+"/PKCS7Padding", "BC");
-        byte[] plaintextBytes = plaintext.getBytes("UTF-8");
-        SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
-        if(modeAlgorithm.equals("ECB")){
-            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
-        }else{
+//        SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+        if (modeAlgorithm.equals("ECB")) {
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+        } else {
             IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getBytes("UTF-8"));
-            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
+            cipher.init(Cipher.ENCRYPT_MODE, key, ivParameterSpec);
         }
         byte[] cipherText = cipher.doFinal(plaintextBytes);
         return Base64.getEncoder().encodeToString(cipherText);
     }
+
     public void encryptAESFile(String sourceFile, String destFile, String iv) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchProviderException, InvalidAlgorithmParameterException {
-        if(key == null) throw new FileNotFoundException("Key not found");
+        if (key == null) throw new FileNotFoundException("Key not found");
         File file = new File(sourceFile);
-        if(file.isFile()){
-            Cipher cipher = Cipher.getInstance("AES/"+modeAlgorithm+"/PKCS7Padding");
-            if(modeAlgorithm.equals("ECB")){
+        if (file.isFile()) {
+            Cipher cipher = Cipher.getInstance("AES");
+            if (modeAlgorithm.equals("ECB")) {
                 cipher.init(Cipher.ENCRYPT_MODE, key);
-            }else{
+            } else {
                 IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getBytes("UTF-8"));
                 cipher.init(Cipher.ENCRYPT_MODE, key, ivParameterSpec);
             }
@@ -72,22 +77,50 @@ public class AES {
             BufferedOutputStream bos = new BufferedOutputStream(fos);
             byte[] input = new byte[64];
             int bytesRead;
-            while((bytesRead = bis.read(input)) != -1){
-                byte[] output= cipher.update(input, 0, bytesRead);
-                if(output != null) bos.write(output);
+            while ((bytesRead = bis.read(input)) != -1) {
+                byte[] output = cipher.update(input, 0, bytesRead);
+                if (output != null) bos.write(output);
             }
             byte[] output = cipher.doFinal();
-            if(output != null) bos.write(output);
+            if (output != null) bos.write(output);
             bis.close();
             bos.flush();
             bos.close();
             fis.close();
             fos.close();
             System.out.println("Encrypted");
-        }else{
+        } else {
             System.out.println("This is not a file");
         }
     }
+
+    public byte[] encryptAESFile(byte[] data,String iv) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchProviderException, InvalidAlgorithmParameterException {
+        if (key == null) throw new FileNotFoundException("Key not found");
+        Cipher cipher = Cipher.getInstance("AES");
+        if (modeAlgorithm.equals("ECB")) {
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+        } else {
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getBytes("UTF-8"));
+            cipher.init(Cipher.ENCRYPT_MODE, key, ivParameterSpec);
+        }
+        byte[] output = cipher.doFinal(data);
+        System.out.println("Encrypted");
+        return output;
+    }
+    public byte[] decryptAESFile(byte[] data,String iv) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchProviderException, InvalidAlgorithmParameterException {
+        if (key == null) throw new FileNotFoundException("Key not found");
+        Cipher cipher = Cipher.getInstance("AES");
+        if (modeAlgorithm.equals("ECB")) {
+            cipher.init(Cipher.DECRYPT_MODE, key);
+        } else {
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getBytes("UTF-8"));
+            cipher.init(Cipher.DECRYPT_MODE, key, ivParameterSpec);
+        }
+        byte[] output = cipher.doFinal(data);
+        System.out.println("Decrypted");
+        return output;
+    }
+
 
     public String decryptAES(String text, String key) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         byte[] encryptDataBytes = Base64.getDecoder().decode(text);
@@ -100,17 +133,18 @@ public class AES {
 
     public String decryptAESText(String text, String key, String iv) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException {
         byte[] encryptDataBytes = Base64.getDecoder().decode(text);
-        Cipher cipher = Cipher.getInstance("AES/"+modeAlgorithm+"/PKCS7Padding", "BC");
+        Cipher cipher = Cipher.getInstance("AES/" + modeAlgorithm + "/PKCS7Padding", "BC");
         SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
-        if(modeAlgorithm.equals("ECB")){
+        if (modeAlgorithm.equals("ECB")) {
             cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
-        }else{
+        } else {
             IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getBytes("UTF-8"));
             cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
         }
         byte[] decryptedBytes = cipher.doFinal(encryptDataBytes);
         return new String(decryptedBytes, "UTF-8");
     }
+
     public String decryptAES(String text, String key, String iv) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException {
         byte[] encryptDataBytes = Base64.getDecoder().decode(text);
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
@@ -120,14 +154,15 @@ public class AES {
         byte[] decryptedBytes = cipher.doFinal(encryptDataBytes);
         return new String(decryptedBytes, "UTF-8");
     }
+
     public void decryptAESFile(String sourceFile, String destFile, String iv) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchProviderException, InvalidAlgorithmParameterException {
-        if(key == null) throw new FileNotFoundException("Key not found");
+        if (key == null) throw new FileNotFoundException("Key not found");
         File file = new File(sourceFile);
-        if(file.isFile()){
-            Cipher cipher = Cipher.getInstance("AES/"+modeAlgorithm+"/PKCS7Padding");
-            if(modeAlgorithm.equals("ECB")){
+        if (file.isFile()) {
+            Cipher cipher = Cipher.getInstance("AES/" + modeAlgorithm + "/PKCS7Padding");
+            if (modeAlgorithm.equals("ECB")) {
                 cipher.init(Cipher.DECRYPT_MODE, key);
-            }else{
+            } else {
                 IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getBytes("UTF-8"));
                 cipher.init(Cipher.DECRYPT_MODE, key, ivParameterSpec);
             }
@@ -137,23 +172,24 @@ public class AES {
             BufferedOutputStream bos = new BufferedOutputStream(fos);
             byte[] input = new byte[64];
             int readByte = 0;
-            while((readByte = bis.read(input)) != -1){
-                byte[] output= cipher.update(input, 0, readByte);
-                if(output != null) bos.write(output);
+            while ((readByte = bis.read(input)) != -1) {
+                byte[] output = cipher.update(input, 0, readByte);
+                if (output != null) bos.write(output);
             }
             byte[] output = cipher.doFinal();
-            if(output != null) bos.write(output);
+            if (output != null) bos.write(output);
             bis.close();
             bos.flush();
             bos.close();
             fis.close();
             fos.close();
             System.out.println("Decrypted");
-        }else{
+        } else {
             System.out.println("This is not a file");
         }
     }
-    public String exportKey(){
+
+    public String exportKey() {
         return Base64.getEncoder().encodeToString(key.getEncoded());
     }
 
@@ -182,7 +218,7 @@ public class AES {
 //        String decryptedDataCBC = aes.decryptAES(encryptedDataCBC, secretKey, iv);
 //        System.out.println("Decrypted CBC: " + decryptedDataCBC);
 
-        AES aes = new AES(256);
-        System.out.println(aes.exportKey());
+//        AES aes = new AES(256);
+//        System.out.println(aes.exportKey());
     }
 }
