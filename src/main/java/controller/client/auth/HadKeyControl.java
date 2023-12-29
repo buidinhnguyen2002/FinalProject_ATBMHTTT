@@ -1,7 +1,9 @@
 package controller.client.auth;
 
+import com.google.gson.JsonObject;
 import dao.client.AuthDAO;
 import entity.Account;
+import entity.ElectronicSignature;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,14 +24,17 @@ public class HadKeyControl extends HttpServlet {
         Account customer = (Account) session.getAttribute("acc");
 
         String inputKey = request.getParameter("input");
-
-        if (inputKey.length() == 392 && !AuthDAO.selectSamePublicKey(inputKey)) {
+        boolean isSuc = false;
+        if (ElectronicSignature.isPublicKey(inputKey) && !AuthDAO.selectSamePublicKey(inputKey)) {
             AuthDAO.updateExpiredPublicKey(customer.getId());
             AuthDAO.insertNewPublicKey(customer.getId(), inputKey);
+            isSuc = true;
         } else {
-//            request.setAttribute("error", "Public key không đúng. Vui lòng nhập lại!");
+            isSuc = false;
         }
-
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("isSuc", isSuc);
+        response.getWriter().println(jsonObject);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
