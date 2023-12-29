@@ -66,7 +66,6 @@ public class ElectronicSignature {
         }
         try {
             if(!checkSignature(publicKey.getPublicKey(), data, digitalSignature)){
-                System.out.println("Do đây");
                 return false;
             }
         } catch (InvalidKeySpecException e) {
