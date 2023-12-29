@@ -23,11 +23,7 @@ public class HadKeyControl extends HttpServlet {
 
         String inputKey = request.getParameter("input");
 
-        boolean authDAO = false;
-
-        System.out.println(inputKey.length());
-
-        if (inputKey.length() == 2048 && !AuthDAO.selectSamePublicKey(inputKey)) {
+        if (inputKey.length() == 392 && !AuthDAO.selectSamePublicKey(inputKey)) {
             AuthDAO.updateExpiredPublicKey(customer.getId());
             AuthDAO.insertNewPublicKey(customer.getId(), inputKey);
         } else {

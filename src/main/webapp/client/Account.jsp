@@ -449,12 +449,10 @@ if (session.getAttribute("acc") == null) {
 											type: "POST",
 											data: { input: inputValue },  // Truyền giá trị từ trường input
 											success: function(data) {
-												// Xử lý phản hồi từ servlet nếu cần
-
-												console.log("Dữ liệu đã được gửi đến servlet.");
+												console.log("Account (Đã có key): Dữ liệu đã được gửi đến servlet.");
 											},
 											error: function(data) {
-												console.log("Đã xảy ra lỗi khi gửi dữ liệu đến servlet.");
+												console.log("Account (Đã có key): Đã xảy ra lỗi khi gửi dữ liệu đến servlet.");
 											}
 										});
 										// Đóng dialog
@@ -472,17 +470,28 @@ if (session.getAttribute("acc") == null) {
 						},
 						"Tạo key": function() {
 							$(this).dialog("close");
-							$("#dialog-confirm1").dialog({
-								resizable: false,
-								height: "auto",
-								width: 500,
-								modal: true,
-								buttons: {
-									"OK": function() {
-										$(this).dialog("close");
-									}
+							$.ajax({
+								url: "${pageContext.request.contextPath}/CreateNewKeyControl",  // URL của servlet
+								type: "POST",
+								success: function() {
+									console.log("Account (Tạo key): Dữ liệu đã được gửi đến servlet.");
+									$("#dialog-confirm1").dialog({
+										resizable: false,
+										height: "auto",
+										width: 500,
+										modal: true,
+										buttons: {
+											"OK": function() {
+												$(this).dialog("close");
+											}
+										}
+									});
+								},
+								error: function() {
+									console.log("Account (Tạo key): Đã xảy ra lỗi khi gửi dữ liệu đến servlet.");
 								}
 							});
+
 						},
 						"Hủy": function() {
 							$(this).dialog("close");
