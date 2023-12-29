@@ -23,6 +23,7 @@
           integrity="sha384-QYIZto+st3yW+o8+5OHfT6S482Zsvz2WfOzpFSXMF9zqeLcFV0/wlZpMtyFcZALm" crossorigin="anonymous">
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/client/assets/css/checkout.vendor.min.css?v=4fcd86c">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/client/assets/css/checkout.min.css?v=17ca415">
     <script src="//bizweb.dktcdn.net/assets/themes_support/libphonenumber-v3.2.30.min.js?1564585558451"></script>
     <script src="${pageContext.request.contextPath}/client/assets/js/checkout.vendor.min.js?v=11006c9"></script>
@@ -30,6 +31,21 @@
     <script src="https://www.paypal.com/sdk/js?client-id=AbenXsywXYlbMw4GpzHDSdiXPx7hKY7adwNFIjsSlY7HfsmSRD6DOzeswhhcBtKiqC46A2kiwzyk_Wf7&currency=USD"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.min.css"/>
+    <style>
+        .field__input-wrapper {
+            position: relative;
+        }
+
+        .field__input-wrapper .clear-btn {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+    </style>
     <script>
         var Bizweb = Bizweb || {};
         Bizweb.id = '117632';
@@ -494,7 +510,8 @@
                                             <label for="privateKey" class="field__label" style="transition: all .2s ease-out;
     -webkit-transition: all .2s ease-out;">Nhập private key</label>
                                             <input name="privateKey" id="privateKey"
-                                                   type="text" class="field__input" required>
+                                                   type="text" class="field__input" required style="padding-right: 25px">
+                                            <button class="clear-btn" onclick="clearInput()"><i class="bi bi-x-circle"></i></button>
                                         </div>
                                     </div>
                                     <p id="error-key" style="color: red"></p>
@@ -898,6 +915,9 @@
             const formattedPrice = formatNumberWithCommas(priceString).replace(/,/g, '.') + ' đ';
             priceElements[i].innerText = formattedPrice;
         }
+    }
+    function clearInput() {
+        document.getElementById('privateKey').value = '';
     }
 
     function formatNumberWithCommas(numberString) {
