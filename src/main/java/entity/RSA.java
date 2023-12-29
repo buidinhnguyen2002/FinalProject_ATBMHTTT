@@ -34,8 +34,6 @@ public class RSA {
     public RSA(Mode mode, String key) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalArgumentException {
         this.mode = mode;
         byte[] keyBytes = Base64.getDecoder().decode(key);
-        System.out.println(keySize);
-
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         if (mode == Mode.ENCRYPT) {
             X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(keyBytes);
