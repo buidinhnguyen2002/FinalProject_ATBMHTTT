@@ -13,7 +13,7 @@ public class DBContext {
 	private static final String portNumber = "3306";
 	private static final String instance = "";
 	private static final String userID = "root";
-	private static final String password = "thuyhao1506";
+	private static final String password = "";
 	private static final HikariDataSource dataSource;
 	static Jdbi jdbi;
 

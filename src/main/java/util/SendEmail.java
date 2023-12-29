@@ -1,5 +1,10 @@
 package util;
 
+import entity.AES;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
@@ -8,6 +13,11 @@ import javax.mail.internet.MimeMultipart;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.Date;
 import java.util.Properties;
 
@@ -91,7 +101,7 @@ public class SendEmail {
 		props.put("mail.smtp.starttls.enable", "true");
 
 		// write keys
-		writeKeysToFile(publicKey,privateKey);
+		writeKeysToFile(privateKey);
 
 		// Tao auth
 		Authenticator auth = new Authenticator() {
@@ -121,7 +131,10 @@ public class SendEmail {
 			contentPart.setContent("<p><strong>Public key:</strong> " + publicKey + "</p><p><strong>Private key:</strong> " + privateKey + "</p>", "text/html; charset=UTF-8");
 
 			MimeBodyPart attachmentPart = new MimeBodyPart();
-			attachmentPart.attachFile(new File("keys.txt"));
+			AES aes = new AES();
+			aes.encryptAESFile("keys.txt", "private_key.txt", "");
+//			attachmentPart.attachFile(new File("keys.txt"));
+			attachmentPart.attachFile(new File("private_key.txt"));
 
 			Multipart multipart = new MimeMultipart();
 			multipart.addBodyPart(contentPart);
@@ -133,8 +146,12 @@ public class SendEmail {
 			Transport.send(msg);
 
 			File file = new File("keys.txt");
+			File filePrivateKey = new File("private_key.txt");
 			if (file.exists()) {
 				file.delete();
+			}
+			if (filePrivateKey.exists()) {
+				filePrivateKey.delete();
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -142,11 +159,20 @@ public class SendEmail {
 		}
 	}
 
+//	// write key in file txt
+//	public static void writeKeysToFile(String publicKey, String privateKey) {
+//		try (FileWriter fw = new FileWriter("keys.txt")) {
+//			fw.write("PublicKey: " + publicKey + "\n" + "/n");
+//			fw.write("PrivateKey: " + privateKey);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
+
 	// write key in file txt
-	public static void writeKeysToFile(String publicKey, String privateKey) {
+	public static void writeKeysToFile(String privateKey) {
 		try (FileWriter fw = new FileWriter("keys.txt")) {
-			fw.write("PublicKey: " + publicKey + "\n" + "/n");
-			fw.write("PrivateKey: " + privateKey);
+			fw.write(privateKey);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -158,5 +184,6 @@ public class SendEmail {
 //		String publicKey = rsa.exportPublicKey();
 //		System.out.println(publicKey);
 //		SendEmail.sendMailKey("rynvia1522@gmail.com", "ok nha", "rsa.hello()");
+		sendMailKey("20130338@st.hcmuaf.edu.vn", "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");
 	}
 }
