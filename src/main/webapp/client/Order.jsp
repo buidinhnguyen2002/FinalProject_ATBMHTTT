@@ -852,35 +852,36 @@
     }
 
     paypal.Buttons({
-        async createOrder() {
-            if (!isFormValid()) {
-                // Hiển thị thông báo lỗi và không tạo đơn hàng
+        createOrder: async function () {
+            if (!(await isFormValid())) {
                 Swal.fire({
                     title: 'Vui lòng điền đầy đủ thông tin',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
-                return false;
+            } else {
+                await convertCurrency();
+                let selectedValue = currency;
+                console.log(selectedValue);
+
+                return fetch("${pageContext.request.contextPath}/cart/PayPalCheckOut", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        denominations: selectedValue,
+                    }),
+                })
+                    .then((response) => response.json())
+                    .then((order) => order.id);
             }
-            await convertCurrency();
-            let selectedValue = currency;
-            console.log(selectedValue);
-            return fetch("${pageContext.request.contextPath}/cart/PayPalCheckOut", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    denominations: selectedValue,
-                }),
-            })
-                .then((response) => response.json())
-                .then((order) => order.id);
         },
-        onApprove(data) {
+        onApprove: function (data) {
             let selectedValue = currency;
-            console.log(data)
-            console.log(selectedValue)
+            console.log(data);
+            console.log(selectedValue);
+
             return fetch("${pageContext.request.contextPath}/cart/CheckRecharge", {
                 method: "POST",
                 headers: {
@@ -893,25 +894,25 @@
             })
                 .then((response) => response.json())
                 .then((orderData) => {
-                    console.log(orderData)
-                    console.log(orderData.purchaseUnits[0].payments.captures[0])
+                    console.log(orderData);
+                    console.log(orderData.purchaseUnits[0].payments.captures[0]);
                     console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+
                     const transaction = orderData.purchaseUnits[0].payments.captures[0];
                     Swal.fire({
                         title: 'Thanh toán thành công',
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then((result) => {
-                        // location.reload();
                         let paymentMethod = document.getElementById("paymentMethod-120771");
                         paymentMethod.removeAttribute("required");
                         let submitBtn = document.getElementById("submitBtn");
                         submitBtn.click();
                     });
-
                 });
         }
-    }).render('#paypal-button-container')
+    }).render('#paypal-button-container');
+
 
     function isFormValid() {
         const email = document.getElementById('email').value;
@@ -968,6 +969,11 @@
         event.preventDefault();
         isFormValid().then(isValid => {
             if (!isValid) {
+                Swal.fire({
+                    title: 'Vui lòng điền đầy đủ thông tin',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             } else {
                 document.getElementById('form_submit').submit();
             }
