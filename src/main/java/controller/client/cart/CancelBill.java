@@ -30,7 +30,9 @@ public class CancelBill extends HttpServlet {
                    }
                    OrderDAO.updateStatusOrder("Đã hủy",id);
                }else {
-                   OrderDAO.updateStatusOrder("Yêu cầu hoàn tiền",id);
+                   if(!order.getStatus().equals("Đã hủy")){
+                       OrderDAO.updateStatusOrder("Yêu cầu hoàn tiền",id);
+                   }
                }
            }
            request.getRequestDispatcher("CartControl").forward(request, response);

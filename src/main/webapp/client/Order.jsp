@@ -36,7 +36,7 @@
             position: relative;
         }
 
-        .field__input-wrapper .clear-btn {
+        .field__input-wrapper .clear-btn, .up-file {
             position: absolute;
             top: 50%;
             right: 10px;
@@ -45,6 +45,10 @@
             background: none;
             cursor: pointer;
         }
+        .up-file {
+            right: 30px;
+        }
+
     </style>
     <script>
         var Bizweb = Bizweb || {};
@@ -510,8 +514,12 @@
                                             <label for="privateKey" class="field__label" style="transition: all .2s ease-out;
     -webkit-transition: all .2s ease-out;">Nhập private key</label>
                                             <input name="privateKey" id="privateKey"
-                                                   type="text" class="field__input" required style="padding-right: 25px">
-                                            <button class="clear-btn" onclick="clearInput()"><i class="bi bi-x-circle"></i></button>
+                                                   type="text" class="field__input" required style="padding-right: 45px">
+                                            <button title="Xóa" class="clear-btn" onclick="clearInput()"><i class="bi bi-x-circle"></i></button>
+                                            <div title="Tải lên private key" class="up-file" id="up-file">
+                                                <i class="bi bi-paperclip" style="font-size: 16px"><input style="display: none" name="file" id="file" type="file" placeholder="Add file"
+                                                ></i>
+                                            </div>
                                         </div>
                                     </div>
                                     <p id="error-key" style="color: red"></p>
@@ -574,6 +582,66 @@
 <%
     API api = new API();
 %>
+<script>
+    document.getElementById('privateKey').addEventListener('blur', function (event){
+        const value = event.target.value;
+        checkSignature(value);
+    })
+    document.getElementById('up-file').addEventListener('click', function() {
+        document.getElementById('file').click();
+    });
+
+    // Xử lý khi có sự thay đổi trong input file (khi người dùng chọn file)
+    document.getElementById('file').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        let fileReader = new FileReader();
+        fileReader.onload = function (event) {
+            const base64String = event.target.result.split(',')[1];
+            console.log("Base64String: " + base64String);
+            getPrivateKeyFromFile(base64String)
+                .then(result => {
+                    console.log("Kết quả từ server:", result);
+                    // file.value = '';
+                })
+                .catch(error => {
+                    console.error("Lỗi khi gửi yêu cầu:", error);
+                    // file.value = '';
+                });
+            document.getElementById('file').value = '';
+        }
+        fileReader.readAsDataURL(file);
+    });
+    function getPrivateKeyFromFile(privateKeyBytes) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: "${pageContext.request.contextPath}/cart/GetPrivateKeyFromFile",
+                type: "POST",
+                data: {
+                    privateKey: privateKeyBytes,
+                },
+                success: function (data) {
+                    let privateKey = JSON.parse(data).privateKey;
+                    let privateKeyInput = document.getElementById('privateKey');
+                    let element = document.getElementById('error-key');
+                    if (privateKey) {
+                        privateKeyInput.value = privateKey;
+                        element.innerText = '';
+                        privateKeyInput.focus()
+                        resolve(true);
+                    } else {
+                        element.innerText = 'Private key không hợp lệ. Vui lòng kiểm tra lại!';
+                        resolve(false);
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                    reject(data);
+                }
+            });
+        });
+    }
+</script>
 <script>
     function appDiscount() {
         // Lấy giá trị mã giảm giá từ ô input
@@ -784,35 +852,36 @@
     }
 
     paypal.Buttons({
-        async createOrder() {
-            if (!isFormValid()) {
-                // Hiển thị thông báo lỗi và không tạo đơn hàng
+        createOrder: async function () {
+            if (!(await isFormValid())) {
                 Swal.fire({
                     title: 'Vui lòng điền đầy đủ thông tin',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
-                return false;
+            } else {
+                await convertCurrency();
+                let selectedValue = currency;
+                console.log(selectedValue);
+
+                return fetch("${pageContext.request.contextPath}/cart/PayPalCheckOut", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        denominations: selectedValue,
+                    }),
+                })
+                    .then((response) => response.json())
+                    .then((order) => order.id);
             }
-            await convertCurrency();
-            let selectedValue = currency;
-            console.log(selectedValue);
-            return fetch("${pageContext.request.contextPath}/cart/PayPalCheckOut", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    denominations: selectedValue,
-                }),
-            })
-                .then((response) => response.json())
-                .then((order) => order.id);
         },
-        onApprove(data) {
+        onApprove: function (data) {
             let selectedValue = currency;
-            console.log(data)
-            console.log(selectedValue)
+            console.log(data);
+            console.log(selectedValue);
+
             return fetch("${pageContext.request.contextPath}/cart/CheckRecharge", {
                 method: "POST",
                 headers: {
@@ -825,25 +894,25 @@
             })
                 .then((response) => response.json())
                 .then((orderData) => {
-                    console.log(orderData)
-                    console.log(orderData.purchaseUnits[0].payments.captures[0])
+                    console.log(orderData);
+                    console.log(orderData.purchaseUnits[0].payments.captures[0]);
                     console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+
                     const transaction = orderData.purchaseUnits[0].payments.captures[0];
                     Swal.fire({
                         title: 'Thanh toán thành công',
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then((result) => {
-                        // location.reload();
                         let paymentMethod = document.getElementById("paymentMethod-120771");
                         paymentMethod.removeAttribute("required");
                         let submitBtn = document.getElementById("submitBtn");
                         submitBtn.click();
                     });
-
                 });
         }
-    }).render('#paypal-button-container')
+    }).render('#paypal-button-container');
+
 
     function isFormValid() {
         const email = document.getElementById('email').value;
@@ -900,6 +969,11 @@
         event.preventDefault();
         isFormValid().then(isValid => {
             if (!isValid) {
+                Swal.fire({
+                    title: 'Vui lòng điền đầy đủ thông tin',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             } else {
                 document.getElementById('form_submit').submit();
             }

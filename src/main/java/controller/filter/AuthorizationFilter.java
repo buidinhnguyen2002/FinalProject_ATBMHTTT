@@ -46,8 +46,7 @@ public class AuthorizationFilter implements Filter {
             // session hợp lệ
             Account account = (Account) session.getAttribute("acc");
             if (account == null) {
-                request.getRequestDispatcher("/client/Login.jsp").forward(request, response);
-            } else {
+                request.getRequestDispatcher("/client/Index.jsp").forward(request, response);            } else {
                 boolean resourceName = false;
                 for (Permission permission : account.getPermissions()
                 ) {
