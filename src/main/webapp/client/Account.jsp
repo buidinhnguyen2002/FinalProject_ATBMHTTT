@@ -18,6 +18,26 @@
     <title><fmt:message key="account.information" bundle="${lang}"></fmt:message></title>
     <link rel="icon" type="image" href="../images/HaLoicon.png"/>
     <jsp:include page="./link/Link.jsp"></jsp:include>
+
+    <style>
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.7); /* Màu nền với độ mờ */
+            z-index: 9999; /* Đảm bảo nó ở trên cùng */
+            display: flex;
+            justify-content: center; /* Căn giữa theo chiều ngang */
+            align-items: center; /* Căn giữa theo chiều dọc */
+        }
+
+        #loadingOverlay img {
+            max-width: 50%; /* Đảm bảo tập tin GIF không vượt quá kích thước màn hình */
+            max-height: 50%; /* Đảm bảo tập tin GIF không vượt quá kích thước màn hình */
+        }
+    </style>
 </head>
 <body>
 <!-- Load page -->
@@ -150,7 +170,7 @@
                                     <p>Thông báo: Bạn có muốn tạo key mới không?</p>
                                 </div>
 
-                                <div id="dialog-confirm1" title="Báo cáo lộ Key" style="display:none;">
+                                <div id="dialog-confirm1" title="Thông báo" style="display:none;">
                                     <p>Key đã được gửi vào email của bạn. Xin hãy check email!</p>
                                 </div>
 
@@ -233,6 +253,10 @@
             </div>
         </div>
     </div>
+</div>
+<!-- Tập tin GIF sẽ được hiển thị ở đây -->
+<div id="loadingOverlay" style="display:none;">
+    <img src="../images/loading.gif" alt="Loading..."/>
 </div>
 <!-- End Main Content -->
 <jsp:include page="./footer/Footer.jsp"></jsp:include>
@@ -508,13 +532,27 @@
                             }
                         });
                     },
+
                     "Tạo key": function () {
                         $(this).dialog("close");
+
+                        function showLoading() {
+                            document.getElementById('loadingOverlay').style.display = 'flex';
+                        }
+
+                        function hideLoading() {
+                            document.getElementById('loadingOverlay').style.display = 'none';
+                        }
+
+                        showLoading();
                         $.ajax({
                             url: "${pageContext.request.contextPath}/CreateNewKeyControl",  // URL của servlet
                             type: "POST",
                             success: function () {
                                 console.log("Account (Tạo key): Dữ liệu đã được gửi đến servlet.");
+
+                                hideLoading();
+
                                 $("#dialog-confirm1").dialog({
                                     resizable: false,
                                     height: "auto",
