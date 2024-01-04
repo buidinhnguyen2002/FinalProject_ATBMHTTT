@@ -394,9 +394,27 @@ public class AuthDAO {
         return count != null && count > 0;
     }
 
+    public static boolean isCheckHaveKey(int idAccount) {
+        Jdbi jdbi = DBContext.me();
+
+        String query = "SELECT Count(publicKey) " +
+                "FROM public_key_signature " +
+                "WHERE idAccount = ? AND (expired > now() OR expired IS NULL)";
+
+        Integer count = jdbi.withHandle(handle ->
+                handle.createQuery(query)
+                        .bind(0, idAccount)
+                        .mapTo(Integer.class)
+                        .one()
+        );
+        return count != null && count > 0;
+    }
+
+
     public static void main(String[] args) {
 //        System.out.println(login("leminhlong@gmail.com","L0374781483Lll@","null"));
-        System.out.println(updateExpiredPublicKey(35));
+//        System.out.println(updateExpiredPublicKey(35));
+        System.out.println(isCheckHaveKey(35));
     }
 
 }

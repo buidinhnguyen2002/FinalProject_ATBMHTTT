@@ -1,3 +1,5 @@
+<%@ page import="dao.client.AuthDAO" %>
+<%@ page import="entity.Account" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -138,6 +140,27 @@
                                        id="errorNumberPhone"></p>
                                 </div>
                             </tr>
+                            <tr>
+                                <td class="colum-account"><fmt:message key="Status.key"
+                                                                       bundle="${lang}"></fmt:message>:
+                                </td>
+                                <td><label for="input-account-phoneNumber"></label>
+                                    <%
+                                            Account account = (Account) session.getAttribute("acc");
+                                            boolean checkKey = AuthDAO.isCheckHaveKey(account.getId());
+                                    %>
+                                    <c:if test="<%= checkKey %>"><p size="60" style="color: #2ba02b" readonly>
+                                        <fmt:message key="Key.actived"
+                                                     bundle="${lang}"></fmt:message>
+                                    </p>
+                                    </c:if>
+                                    <c:if test="<%= !checkKey %>"><p size="60" style="color: firebrick" readonly>
+                                        <fmt:message key="Key.do.not.active"
+                                                     bundle="${lang}"></fmt:message>
+                                    </p>
+                                    </c:if>
+                                </td>
+                            </tr>
                             </tbody>
                             <div class="row">
                                 <p style="color: green;">${sucinfo}</p>
@@ -161,12 +184,12 @@
                             </li>
                             <li>
                                 <button type="button" id="btn-change-report" class="btn-cart"
-                                        title="Báo cáo lộ key">
+                                        title="Kch hoạt/Tạo key">
 										<span><fmt:message key="Report.key"
                                                            bundle="${lang}"></fmt:message></span>
                                 </button>
 
-                                <div id="dialog-confirm" title="Báo cáo lộ Key" style="display:none;">
+                                <div id="dialog-confirm" title="Tạo key mới" style="display:none;">
                                     <p>Thông báo: Bạn có muốn tạo key mới không?</p>
                                 </div>
 
@@ -174,7 +197,7 @@
                                     <p>Key đã được gửi vào email của bạn. Xin hãy check email!</p>
                                 </div>
 
-                                <div id="dialog-inputs" title="Nhập Key" style="display:none;">
+                                <div id="dialog-inputs" title="Nhập key" style="display:none;">
                                     <form id="keyForm" action="${pageContext.request.contextPath}/auth/HadKeyControl"
                                           method="post">
                                         <input type="text" name="input" id="input" placeholder="Public key"
