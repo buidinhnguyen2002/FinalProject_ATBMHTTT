@@ -834,7 +834,11 @@
         try {
             const response = await fetch(url, {
                 headers: {
+<<<<<<< Updated upstream
                     "apikey": "UHGDQYJ2vrrSRPOZQNUWYcxOXhreBXyP"
+=======
+                    "apikey": "fheOfDMMOUI0Np1ydcrUdob0EoClytFA"
+>>>>>>> Stashed changes
                 }
             });
 
