@@ -302,6 +302,7 @@ public class Order implements Serializable {
 		this.districtId = districtId;
 		this.orderDetails = orderDetails;
 	}
+
 	public String orderInfo(){
 		return "Order{" +
 				"id=" + id +
@@ -310,12 +311,14 @@ public class Order implements Serializable {
 				", statusPay='" + statusPay + '\'' +
 				", idAccount=" + idAccount +
 				", sale=" + sale +
+				", feeShip="+ feeship+
 				", totalPrice=" + totalPrice +
 				", address='" + address + '\'' +
 				", note='" + note + '\'' +
 				", wardId='" + wardId + '\'' +
 				", districtId='" + districtId + '\'' +
 				", orderDetails=" + orderDetails +
+				", transactionId=" +transactionId+
 				'}';
 	}
 }

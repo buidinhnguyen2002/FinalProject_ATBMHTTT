@@ -71,7 +71,7 @@ public class OrderDAO {
 
     public static Order getOrderByBid(String id) {
         Jdbi me = DBContext.me();
-        String query = "select id,createAt,deliveryAt,statusPay,idAccount,sale,totalPrice,status,address,note, wardId, districtId,idEmployee,updateAt,publicKeyId,transactionId from orders where id = ?";
+        String query = "select id,createAt,deliveryAt,statusPay,idAccount,sale,totalPrice,status,address,note, wardId, districtId,idEmployee,updateAt,publicKeyId,transactionId,feeship from orders where id = ?";
         Order order = me.withHandle(handle -> handle.createQuery(query).bind(0, id).mapToBean(Order.class).one());
         order.setAccount(UtilDAO.findAccountById(order.getIdAccount()));
         return order;
