@@ -49,12 +49,6 @@ public class BillAdminDAO {
 		Jdbi me = DBContext.me();
 		return me.withHandle(handle -> handle.createUpdate(query).bind(0,bid).execute())==1;
 	}
-	public static boolean updateBillStatusPay(String statusPay, String bid) {
-		String query = "update orders set statusPay = ? where id =?;";
-		Jdbi me = DBContext.me();
-		return me.withHandle(handle -> handle.createUpdate(query).bind(0,statusPay).bind(1,bid).execute())==1;
-	}
-
 	public static int getTotalAcceptProduct() {
 		String query = "SELECT count(createAt) FROM orders where status = 'Hoàn thành'and month (createAt) = month(current_date())";
 		try (Handle handle = DBContext.me().open()) {

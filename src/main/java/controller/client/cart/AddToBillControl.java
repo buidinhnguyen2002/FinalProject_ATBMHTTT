@@ -71,7 +71,7 @@ public class AddToBillControl extends HttpServlet {
                 String statusPay = (String) session.getAttribute("isPay");
                 String transactionId = "";
                 if (statusPay == null) {
-                    order.setStatusPay("Chưa thanh toán");
+                    order.setStatusPay("Thanh toán khi nhận hàng");
                 } else {
                     if (session.getAttribute("isPay").equals("Payed")) {
                         order.setStatusPay("Đã thanh toán");
