@@ -286,7 +286,7 @@
                                     <c:if test="${bill.statusPay == 'Đã thanh toán'&& check==false&&bill.status!='Hoàn thành'&& bill.status!='Đang xử lý'}">
                                         <a href="${pageContext.request.contextPath}/cart/CancelBill?id=${bill.id}&status=Payed"
                                            id="cancelLink"
-                                           style="background-color: yellow; margin-right: 10px" class="btn btn--large">Yêu cầu hoàn tiền</a>
+                                           style="background-color: yellow; color: black; margin-right: 10px" class="btn btn--large">Yêu cầu hoàn tiền</a>
                                     </c:if>
                                     <c:if test="${check==false && bill.status!='Hoàn thành'}">
                                         <script>
