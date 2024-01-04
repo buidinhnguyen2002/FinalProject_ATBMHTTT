@@ -146,20 +146,20 @@
                                 </td>
                                 <td><label for="input-account-phoneNumber"></label>
                                     <%
-                                            Account account = (Account) session.getAttribute("acc");
-                                            boolean checkKey = AuthDAO.isCheckHaveKey(account.getId());
+                                        Account account = (Account) session.getAttribute("acc");
+                                        boolean checkKey = AuthDAO.isCheckHaveKey(account.getId());
                                     %>
                                     <c:if test="<%= checkKey %>">
                                         <p id="status-key" size="60" style="color: #2ba02b" readonly>
-                                        <fmt:message key="Key.actived"
-                                                     bundle="${lang}"></fmt:message>
-                                    </p>
+                                            <fmt:message key="Key.actived"
+                                                         bundle="${lang}"></fmt:message>
+                                        </p>
                                     </c:if>
                                     <c:if test="<%= !checkKey %>">
                                         <p  id="status-key" size="60" style="color: firebrick" readonly>
-                                        <fmt:message key="Key.do.not.active"
-                                                     bundle="${lang}"></fmt:message>
-                                    </p>
+                                            <fmt:message key="Key.do.not.active"
+                                                         bundle="${lang}"></fmt:message>
+                                        </p>
                                     </c:if>
                                 </td>
                             </tr>
@@ -605,6 +605,5 @@
         });
     });
 </script>
-
 </body>
 </html>

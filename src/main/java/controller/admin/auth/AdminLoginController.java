@@ -23,10 +23,10 @@ public class AdminLoginController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     String namelog = "Login";
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        getServletContext().getRequestDispatcher("/admin/admin-login.jsp").forward(request, response);
-    }
+//    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+//            throws ServletException, IOException {
+//        getServletContext().getRequestDispatcher("/admin/admin-login.jsp").forward(request, response);
+//    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -39,9 +39,11 @@ public class AdminLoginController extends HttpServlet {
             String password = request.getParameter("admin-password");
             HttpSession session = request.getSession();
             Account a = LoginAdminDAO.loginAdmin(username, password);
+            Account account = AuthDAO.login(username, password, password);
             if (a != null) {
                 if (SecurityDAO.hasPermission(SecurityDAO.getIdResource("/admin"), a.getAccountName(), "read")) {
                     session.setAttribute("admin", a);
+                    session.setAttribute("acc", account);
                     Account acc = AuthDAO.login(username, password, password);
                     session.setAttribute("acc", acc);
                     log.setSrc(namelog + " LOGIN ADMIN");

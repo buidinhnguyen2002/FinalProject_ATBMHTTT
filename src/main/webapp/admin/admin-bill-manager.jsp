@@ -113,11 +113,11 @@
                                 <c:if test="${o.statusPay=='Đã thanh toán'}">
                                     <td style="color: green">${o.statusPay}</td>
                                 </c:if>
-                                <c:if test="${o.statusPay=='Chưa thanh toán'}">
-                                    <td style="color: red">${o.statusPay}</td>
+                                <c:if test="${o.statusPay=='Thanh toán khi nhận hàng'}">
+                                    <td style="color: blue">${o.statusPay}</td>
                                 </c:if>
                                 <c:if test="${o.statusPay=='Đã hoàn tiền'}">
-                                    <td style="color: yellow">${o.statusPay}</td>
+                                    <td style="color: orange">${o.statusPay}</td>
                                 </c:if>
                                 <td>
                                     <c:if test="${o.status=='Đang xử lý'}">

@@ -181,7 +181,7 @@
                                         <td>${count}</td>
                                         <td width="70" class="priceSystas" style="text-align: right;">${o.totalPrice}</td>
                                         <c:if test="${o.statusPay=='Đã thanh toán'}"><td style="color: #0aa60f">${o.statusPay}</td></c:if>
-                                        <c:if test="${o.statusPay=='Chưa thanh toán'}"><td style="color: #0f2094">${o.statusPay}</td></c:if>
+                                        <c:if test="${o.statusPay=='Thanh toán khi nhận hàng'}"><td style="color: blue">${o.statusPay}</td></c:if>
                                         <c:if test="${o.statusPay=='Đã hoàn tiền'}"><td style="color: #0aa60f">${o.statusPay}</td></c:if>
                                         <td>
                                             <c:if test="${o.status=='Đang xử lý'}">
@@ -197,7 +197,7 @@
                                                 <span class="badge bg-danger" style="background-color: red">${o.status}</span>
                                             </c:if>
                                             <c:if test="${o.status=='Yêu cầu hoàn tiền'}">
-                                                <span class="badge bg-warning" style="background-color: yellow">${o.status}</span>
+                                                <span class="badge bg-warning" style="background-color: yellow ;color: black">${o.status}</span>
                                             </c:if>
                                             <c:if test="${o.status=='Hoàn thành'}">
                                                 <span class="badge bg-success" style="background-color: #0aa60f">${o.status}</span>

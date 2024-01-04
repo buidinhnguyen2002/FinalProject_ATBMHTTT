@@ -16,7 +16,7 @@ public class AuthorizationFilter implements Filter {
     private ServletContext context;
     private final String[] ALLOWED_PATHS = {"/IndexControl", "/client", "/Login", "/DetailControl", "/LoginGoogle",
             "/Register", "/SubmitEmail", "/VerifyEmailControl", "/SearchControl", "/ShowProductControl", "/ErrorPageController", "/LogoutControl", "/images", "/sweetalert2" +
-            "/@sweetalert2","/observer","/ForgetPasswordController","/rating-product","/Commentcontrol","/Replycontrol","/Showmorecontrol","/Index.jsp","/HadKeyControl", "/CreateNewKeyControl",""};
+            "/@sweetalert2", "/observer","/ForgetPasswordController", "/rating-product", "/Commentcontrol", "/Replycontrol", "/Showmorecontrol", "/Index.jsp", "/HadKeyControl", "/CreateNewKeyControl", ""};
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -30,14 +30,19 @@ public class AuthorizationFilter implements Filter {
         HttpSession session = httpRequest.getSession(false);
 
         String requestedResource = httpRequest.getRequestURI().substring(httpRequest.getContextPath().length());
+        boolean admin_login = false;
+        if (requestedResource.equals("/admin/admin-login.jsp")||requestedResource.equals("/admin/AdminLoginController")) {
+            admin_login = true;
+        }
         StringTokenizer stringTokenizer = new StringTokenizer(requestedResource, "/");
         if (stringTokenizer.hasMoreTokens()) {
             requestedResource = "/" + stringTokenizer.nextToken();
         } else {
             requestedResource = "";
         }
+
         for (String allowedPath : ALLOWED_PATHS) {
-            if (requestedResource.equals(allowedPath)) {
+            if (requestedResource.equals(allowedPath)||admin_login) {
                 chain.doFilter(request, response);
                 return;
             }
@@ -46,7 +51,8 @@ public class AuthorizationFilter implements Filter {
             // session hợp lệ
             Account account = (Account) session.getAttribute("acc");
             if (account == null) {
-                request.getRequestDispatcher("/client/Index.jsp").forward(request, response);            } else {
+                request.getRequestDispatcher("/client/Index.jsp").forward(request, response);
+            } else {
                 boolean resourceName = false;
                 for (Permission permission : account.getPermissions()
                 ) {

@@ -74,7 +74,6 @@ public class BillManagerController extends HttpServlet {
         }
         if (type.equals("success")) {
             isSuc = BillAdminDAO.updateBill("Hoàn thành", id);
-                    BillAdminDAO.updateBillStatusPay("Đã thanh toán",id);
                     BillAdminDAO.updateBillDeliveryAt(id);
             log.setSrc(namelog + " UPDATE ");
             log.setContent("UPDATE BILL SUCCESS BY USER: "+ account.getAccountName());
