@@ -307,8 +307,8 @@ public class Order implements Serializable {
 		return "Order{" +
 				"id=" + id +
 				", createAt='" + createAt + '\'' +
-				", deliveryAt='" + deliveryAt + '\'' +
-				", statusPay='" + statusPay + '\'' +
+//				", deliveryAt='" + deliveryAt + '\'' +
+//				", statusPay='" + statusPay + '\'' +
 				", idAccount=" + idAccount +
 				", sale=" + sale +
 				", feeShip="+ feeship+
