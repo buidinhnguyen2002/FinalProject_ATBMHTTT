@@ -36,4 +36,13 @@ public class CreateNewKeyControl extends HttpServlet {
             throws ServletException, IOException {
         doPost(request, response);
     }
+
+    public static void main(String[] args) {
+        RSA rsa = new RSA(2048);
+        String publicKey = rsa.exportPublicKey();
+        String privateKey = rsa.exportPrivateKey();
+        System.out.println(publicKey);
+        System.out.println("==========================");
+        System.out.println(privateKey);
+    }
 }
