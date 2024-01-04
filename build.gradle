@@ -59,9 +59,9 @@ publishing {
 apply plugin: 'org.hidetake.ssh'
 remotes {
     host {
-        host = '34.124.241.160'
+        host = '35.240.255.14'
         user = 'thuyhao_it_2002'
-        identity = file('C:/Users/RynVi/.ssh/id_rsa')
+        identity = file('C:/Users/lemin/.ssh/id_rsa')
     }
 }
 ssh.settings {
@@ -103,7 +103,7 @@ tasks.withType(JavaCompile) {
 }
 
 task docker_deploy {
-//    docker_deploy.dependsOn docker_app_start
+    docker_deploy.dependsOn docker_app_start
     docker_deploy.dependsOn docker_upload_file_to_server
     docker_deploy.dependsOn build
     tasks.getByName('docker_app_start').mustRunAfter docker_upload_file_to_server
