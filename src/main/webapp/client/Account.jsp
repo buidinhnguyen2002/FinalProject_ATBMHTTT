@@ -149,12 +149,14 @@
                                             Account account = (Account) session.getAttribute("acc");
                                             boolean checkKey = AuthDAO.isCheckHaveKey(account.getId());
                                     %>
-                                    <c:if test="<%= checkKey %>"><p size="60" style="color: #2ba02b" readonly>
+                                    <c:if test="<%= checkKey %>">
+                                        <p id="status-key" size="60" style="color: #2ba02b" readonly>
                                         <fmt:message key="Key.actived"
                                                      bundle="${lang}"></fmt:message>
                                     </p>
                                     </c:if>
-                                    <c:if test="<%= !checkKey %>"><p size="60" style="color: firebrick" readonly>
+                                    <c:if test="<%= !checkKey %>">
+                                        <p  id="status-key" size="60" style="color: firebrick" readonly>
                                         <fmt:message key="Key.do.not.active"
                                                      bundle="${lang}"></fmt:message>
                                     </p>
@@ -534,6 +536,7 @@
                                                 $("#dialog-warning").text("Key không hợp lệ").dialog("open");
                                             } else {
                                                 $("#dialog-warning").text("Cập nhật thành công!").dialog("open");
+                                                $("#status-key").html('<fmt:message key="Key.actived" bundle="${lang}"></fmt:message>').css("color", "#2ba02b");
                                                 $("#input").val("");
                                             }
                                             console.log("Account (Đã có key): Dữ liệu đã được gửi đến servlet.");
@@ -583,6 +586,7 @@
                                     modal: true,
                                     buttons: {
                                         "OK": function () {
+                                            $("#status-key").html('<fmt:message key="Key.actived" bundle="${lang}"></fmt:message>').css("color", "#2ba02b");
                                             $(this).dialog("close");
                                         }
                                     }
