@@ -1,15 +1,15 @@
 package controller.client.auth;
 
-import java.io.IOException;
+import dao.client.AuthDAO;
+import entity.Account;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import dao.client.AuthDAO;
-import entity.Account;
+import java.io.IOException;
 
 @WebServlet("/account/EditControl")
 public class EditControl extends HttpServlet {
